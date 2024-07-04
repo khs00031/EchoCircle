@@ -6,6 +6,7 @@ EchoCirecle을 이용하여 폐가전제품을 간편히 처리하세요!
 
 # ERD
 ![ERD](./img/ERD.png)
+https://www.erdcloud.com/d/6jomkNA9rrzGY5y8h
 
 # 팀원 소개
 
