@@ -12,9 +12,9 @@ https://www.erdcloud.com/d/6jomkNA9rrzGY5y8h
 
  |이름|직책|담당 업무|
 |------|---|---|
-|김현식|팀장|Backend, Infra, BigData|
-|최우석|팀원|Frontend, AI, Crawling|
-|이지은|팀원|Backend, Frontend, Design|
+|김현식(팀장)|Backend, Infra, BigData|
+|최우석|Frontend, AI, Crawling|
+|이지은|Backend, Frontend, Design|
 
 # Git Rule
 
