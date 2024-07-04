@@ -10,7 +10,7 @@ https://www.erdcloud.com/d/6jomkNA9rrzGY5y8h
 
 # 팀원 소개
 
- |이름|담당 업무|
+|이름|담당 업무|
 |------|---|---|
 |김현식(팀장)|Backend, Infra, BigData|
 |최우석|Frontend, AI, Crawling|
