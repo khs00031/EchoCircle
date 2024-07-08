@@ -49,6 +49,44 @@ public class MemberController {
 
     }
 
+    @GetMapping("/checkNickname/{nickname}")
+    @Operation(summary = "닉네임 중복 체크", description = "해당 닉네임이 DB에 있는지 검사한다. ")
+    public ResponseEntity<?> verifyNickName(@PathVariable String nickname) throws Exception {
+        log.info("memberController 호출 - 닉네임 중복 체크: " + nickname);
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            boolean exist = memberService.checkNickname(nickname);
+            returnData.put("중복 여부", exist);
+            log.info("닉네임 중복 체크 결과: " + exist);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("닉네임 중복 체크 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/checkEmail/{email}")
+    @Operation(summary = "이메일 중복 체크", description = "해당 이메일이 DB에 있는지 검사한다. ")
+    public ResponseEntity<?> verifyEMail(@PathVariable String email) throws Exception {
+        log.info("memberController 호출 - 이메일 중복 체크: " + email);
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            boolean exist = memberService.checkEmail(email);
+            returnData.put("중복 여부", exist);
+            log.info("이메일 중복 체크 결과: " + exist);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("이메일 중복 체크 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{email}")
     @Operation(summary = "유저 정보 가져오기", description = "해당 email의 유저를 가져옴")
     public ResponseEntity<?> getUserInfo(@PathVariable String email) throws Exception {
