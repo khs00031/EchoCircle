@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,16 +35,21 @@ public class MemberController {
     })
     @PostMapping("/regist")
     public ResponseEntity<?> regist(@RequestBody RequestRegistDto requestRegistDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
         try {
-            log.info("회원가입 시작");
-            memberService.regist(requestRegistDto.getEmail(), requestRegistDto.getNickname(), requestRegistDto.getAddress(), requestRegistDto.getPhone());
+            memberService.regist(requestRegistDto);
             log.info("회원가입 성공");
-
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "회원가입 성공");
+            resultMap.put("httpStatus", status);
         } catch (Exception e) {
-            log.info("회원가입 실패 - 서버(DB) 오류");
-            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("회원가입 실패 - " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
         }
+        return new ResponseEntity<>(resultMap, status);
 
     }
 
@@ -56,7 +60,7 @@ public class MemberController {
 
         try {
             Map<String, Object> returnData = new HashMap<>();
-            boolean exist = memberService.checkNickname(nickname);
+            boolean exist = memberService.existNickname(nickname);
             returnData.put("exist", exist);
             log.info("닉네임 중복 체크 결과: " + exist);
 
@@ -75,7 +79,7 @@ public class MemberController {
 
         try {
             Map<String, Object> returnData = new HashMap<>();
-            boolean exist = memberService.checkEmail(email);
+            boolean exist = memberService.existEmail(email);
             returnData.put("exist", exist);
             log.info("이메일 중복 체크 결과: " + exist);
 
