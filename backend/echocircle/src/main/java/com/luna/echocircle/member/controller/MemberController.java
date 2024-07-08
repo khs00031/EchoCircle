@@ -57,7 +57,7 @@ public class MemberController {
         try {
             Map<String, Object> returnData = new HashMap<>();
             boolean exist = memberService.checkNickname(nickname);
-            returnData.put("중복 여부", exist);
+            returnData.put("exist", exist);
             log.info("닉네임 중복 체크 결과: " + exist);
 
             // 인증 코드 리턴
@@ -76,7 +76,7 @@ public class MemberController {
         try {
             Map<String, Object> returnData = new HashMap<>();
             boolean exist = memberService.checkEmail(email);
-            returnData.put("중복 여부", exist);
+            returnData.put("exist", exist);
             log.info("이메일 중복 체크 결과: " + exist);
 
             // 인증 코드 리턴
