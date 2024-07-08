@@ -18,6 +18,12 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.5'		// Springdoc OpenAPI 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 	// jpa 의존성 추가
+	compileOnly 'org.projectlombok:lombok:1.18.24' // Lombok 의존성 추가
+	annotationProcessor 'org.projectlombok:lombok:1.18.24' // Lombok annotation processor 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security' // Spring Security 의존성 추가
+	runtimeOnly 'mysql:mysql-connector-java:8.0.28'	// MySQL Connector/J 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
