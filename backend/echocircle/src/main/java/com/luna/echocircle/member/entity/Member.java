@@ -3,10 +3,12 @@ package com.luna.echocircle.member.entity;//    package com.luna.echocircle.user
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Data
-@Table(name = "member")
+@Table(name = "member", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email"),
+        @UniqueConstraint(columnNames = "nickname")
+})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,10 +18,10 @@ public class Member {
     @Column(name = "mid")
     private long id;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
     @Column(name = "address")
