@@ -1,4 +1,4 @@
-package com.luna.echocircle.member.service;//package com.luna.echocircle.user.service;
+package com.luna.echocircle.member.service;//package com.luna.echocircle.member.service;
 
 import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.repository.MemberRepository;
@@ -24,5 +24,16 @@ public class MemberService {
         return memberRepository.findMemberByEmail(email);
     }
 
+    public Member regist(String email, String nickname, String address, String phone) {
+        log.info("회원가입 서비스 호출 - ");
+        Member member = Member.builder()
+                .email(email)
+                .nickname(nickname)
+                .address(address)
+                .phone(phone)
+                .build();
+
+        return memberRepository.save(member);
+    }
 
 }
