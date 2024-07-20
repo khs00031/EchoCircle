@@ -18,6 +18,8 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'	// mongodb의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.5'		// Springdoc OpenAPI 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 	// jpa 의존성 추가
 	compileOnly 'org.projectlombok:lombok:1.18.24' // Lombok 의존성 추가
