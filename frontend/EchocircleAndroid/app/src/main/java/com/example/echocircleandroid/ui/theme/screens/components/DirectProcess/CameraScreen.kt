@@ -1,4 +1,3 @@
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -20,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -27,12 +28,11 @@ import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.coroutines.launch
 import java.nio.ByteBuffer
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 @Composable
-fun DirectProcessingScreen() {
+fun StartCameraScreen() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var hasCameraPermission by remember { mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) }
@@ -46,8 +46,6 @@ fun DirectProcessingScreen() {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         hasCameraPermission = isGranted
     }
-
-    val cameraExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
 
     LaunchedEffect(key1 = true) {
         if (!hasCameraPermission) {
@@ -79,6 +77,10 @@ fun DirectProcessingScreen() {
         }, ContextCompat.getMainExecutor(context))
     }
 
+    suspend fun sendTextToServer(text: String) {
+
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,10 +93,9 @@ fun DirectProcessingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "수거하실 폐가전의\n바코드 번호를 찍어주세요",
-                fontSize = 20.sp,
+                text = "수거하실 폐가전의 바코드 번호를 찍어주세요",
+                fontSize = 16.sp,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 16.dp)
             )
 
             if (hasCameraPermission) {
@@ -102,6 +103,7 @@ fun DirectProcessingScreen() {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
+                        .height(300.dp) // 고정된 높이로 설정
                         .aspectRatio(4f / 3f), // 고정된 비율로 설정
                     contentAlignment = Alignment.Center
                 ) {
@@ -130,9 +132,9 @@ fun DirectProcessingScreen() {
                 )
             }
 
-            Button(
-                onClick = {
-                    if (capturedText.isEmpty()) {
+            if (capturedText.isEmpty() && !isProcessing) {
+                Button(
+                    onClick = {
                         isProcessing = true
                         imageCapture.takePicture(
                             ContextCompat.getMainExecutor(context),
@@ -153,45 +155,55 @@ fun DirectProcessingScreen() {
                                 }
                             }
                         )
-                    } else {
-                        // 다시 촬영하기 버튼 동작
-                        capturedText = ""
-                        startCamera()
-                    }
-                },
-                enabled = !isProcessing,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)
-            ) {
-                Text(text = if (capturedText.isEmpty()) "촬영하기" else "다시 촬영하기")
-            }
-
-            if (capturedText.isNotEmpty()) {
-                Text(
-                    text = "추출된 텍스트:\n$capturedText",
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "맞으신가요?",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Button(
-                    onClick = { /* 다음 단계로 이동하는 동작 */ },
+                    },
+                    enabled = !isProcessing,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)
                 ) {
-                    Text(text = "다음 단계")
+                    Text(text = "촬영하기")
                 }
+            }
+
+            if (capturedText.isNotEmpty() && !isProcessing) {
+
+
+                val coroutineScope = rememberCoroutineScope()
+
+                capturedText.split("\n").forEach { text ->
+                    Text(
+                        text = text + "   검색하기",
+                        fontSize = 16.sp,
+                        color = Color.Blue,
+                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                coroutineScope.launch {
+                                    sendTextToServer(text)
+                                }
+                            }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        capturedText = ""
+                        startCamera()
+                    },
+                    enabled = !isProcessing,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(text = "다시 촬영하기")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -204,7 +216,6 @@ fun DirectProcessingScreen() {
         }
     }
 }
-
 private fun ImageProxy.toBitmap(): Bitmap {
     val buffer: ByteBuffer = planes[0].buffer
     val bytes = ByteArray(buffer.remaining())
@@ -219,10 +230,14 @@ private fun extractTextFromImage(bitmap: Bitmap, onTextExtracted: (String) -> Un
     recognizer.process(image)
         .addOnSuccessListener { visionText ->
             val extractedText = visionText.text
-            onTextExtracted(extractedText)
+            if (extractedText.isEmpty()) {
+                onTextExtracted("텍스트가 감지되지 않았습니다.")
+            } else {
+                onTextExtracted(extractedText)
+            }
         }
         .addOnFailureListener { e ->
             Log.e("DirectProcessingScreen", "Text recognition failed", e)
-            onTextExtracted("")
+            onTextExtracted("텍스트 인식 실패")
         }
 }

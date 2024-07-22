@@ -1,10 +1,11 @@
 package com.example.echocircleandroid.ui.theme.screens.components
 
 import BottomNavigationBar
-import DirectProcessingScreen
 import FreeSharingScreen
 import HomeCollectionScreen
 import MyPageScreen
+import StartCameraScreen
+import UserGuideScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,7 +38,7 @@ fun AppMainScreen(navController: NavHostController) {
                 LoginScreen(navController)
             }
             composable(BottomNavItem.DirectProcessing.screen_route) {
-                DirectProcessingScreen()
+                UserGuideScreen(navController)
             }
             composable(BottomNavItem.HomeCollection.screen_route) {
                 HomeCollectionScreen()
@@ -47,6 +48,9 @@ fun AppMainScreen(navController: NavHostController) {
             }
             composable(BottomNavItem.MyPage.screen_route) {
                 MyPageScreen()
+            }
+            composable("start_camera"){
+                StartCameraScreen()
             }
         }
     }
