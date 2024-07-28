@@ -25,6 +25,10 @@ public class MemberService {
         return memberRepository.findMemberByEmail(email);
     }
 
+    public Member getMember(long mid){
+        return memberRepository.findMemberById(mid);
+    }
+
     public Member regist(RequestRegistDto requestRegistDto) {
         log.info("회원가입 서비스 호출 - ");
         Member member = Member.builder()
