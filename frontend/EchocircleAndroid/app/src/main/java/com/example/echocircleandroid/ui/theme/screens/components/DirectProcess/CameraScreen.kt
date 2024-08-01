@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 import java.nio.ByteBuffer
 
 @Composable
-fun StartCameraScreen() {
+fun StartCameraScreen(navController: NavController) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var hasCameraPermission by remember { mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) }
@@ -77,8 +78,15 @@ fun StartCameraScreen() {
         }, ContextCompat.getMainExecutor(context))
     }
 
+    /* TODO : 서버에서 해당 제품 있는지 찾아보기*/
     suspend fun sendTextToServer(text: String) {
+        val found = true
 
+        if(found){
+            navController.navigate(NavItem.CheckDeviceScreen.screen_route)
+        }else{
+            navController.navigate(NavItem.NotFoundDeviceScreen.screen_route)
+        }
     }
 
     Box(
@@ -211,7 +219,9 @@ fun StartCameraScreen() {
             Text(
                 text = "바코드가 없으신가요?",
                 color = Color.Blue,
-                modifier = Modifier.clickable { /* 바코드가 없는 경우 클릭 시 동작 */ }
+                modifier = Modifier.clickable {
+
+                },
             )
         }
     }

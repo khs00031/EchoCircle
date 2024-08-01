@@ -4,6 +4,7 @@ import BottomNavigationBar
 import FreeSharingScreen
 import HomeCollectionScreen
 import MyPageScreen
+import NavItem
 import StartCameraScreen
 import UserGuideScreen
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.echocircleandroid.ui.theme.screens.LoginScreen
+import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CannotCollectDeviceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CheckDeviceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.NotFoundDeviceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController) {
@@ -41,7 +47,7 @@ fun AppMainScreen(navController: NavHostController) {
                 UserGuideScreen(navController)
             }
             composable(BottomNavItem.HomeCollection.screen_route) {
-                HomeCollectionScreen()
+                HomeCollectionScreen(navController)
             }
             composable(BottomNavItem.FreeSharing.screen_route) {
                 FreeSharingScreen()
@@ -50,8 +56,25 @@ fun AppMainScreen(navController: NavHostController) {
                 MyPageScreen()
             }
             composable("start_camera"){
-                StartCameraScreen()
+                StartCameraScreen(navController)
             }
+
+            composable(NavItem.FoundDeviceScreen.screen_route){
+                FoundDeviceScreen(navController)
+            }
+            composable(NavItem.NotFoundDeviceScreen.screen_route){
+                NotFoundDeviceScreen(navController)
+            }
+            composable(NavItem.CheckDeviceScreen.screen_route){
+                CheckDeviceScreen(navController)
+            }
+            composable(NavItem.CannotCollectDeviceScreen.screen_route){
+                CannotCollectDeviceScreen(navController)
+            }
+            composable(NavItem.PhoneCallCollectScreen.screen_route){
+                PhoneCallCollectScreen()
+            }
+
         }
     }
 }

@@ -8,4 +8,11 @@
     <string name="app_collection">가전 수거</string>
     <string name="free_sharing">무료 나눔</string>
     <string name="my_page">마이 페이지</string>
+
+    <string name="device_collect_screen">device collect screen</string>
+    <string name="found_device_screen">Device Found Screen</string>
+    <string name="not_found_device_screen">Not Device Found Screen</string>
+    <string name="cannot_collect_device_screen">cannot found device screen</string>
+    <string name="check_device_screen">check device screen</string>
+    <string name="phoneCall_collect_screen">phone call collect screen</string>
 </resources>
