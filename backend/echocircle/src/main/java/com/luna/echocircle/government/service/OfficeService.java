@@ -22,6 +22,21 @@ public class OfficeService {
         return officeRepository.findAll();
     }
 
+    public List<String> getAllDoInfo(){
+        return officeRepository.findAllDo();
+    }
+
+    public List<String> getAllSiInfo(String doStr){
+        return officeRepository.findAllSi(doStr);
+    }
+
+    public List<String> getAllGuInfo(String si){
+        return officeRepository.findAllGu(si);
+    }
+
+    public List<String> getAllDongInfo(String si, String gu){
+        return officeRepository.findAllDong(si, gu);
+    }
 
 }
 

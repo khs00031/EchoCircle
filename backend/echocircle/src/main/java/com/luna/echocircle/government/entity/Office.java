@@ -23,8 +23,14 @@ public class Office {
     @Column(name = "do", nullable = false)
     private String doStr;
 
-    @Column(name = "si", unique = true, nullable = false)
+    @Column(name = "si", nullable = false)
     private String si;
+
+    @Column(name = "gu", nullable = true)  // null 허용
+    private String gu;
+
+    @Column(name = "dong", nullable = true)  // null 허용
+    private String dong;
 
     @Column(name = "phone")
     private String phone;
