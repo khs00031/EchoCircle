@@ -50,5 +50,76 @@ public class OfficeController {
         }
     }
 
+    @GetMapping("/do")
+    @Operation(summary = "도 정보 불러오기", description = "도 단위 지역정보를 불러온다.")
+    public ResponseEntity<?> getDoInfo() throws Exception {
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            List<String> doInfo = officeService.getAllDoInfo();
+            returnData.put("doInfo", doInfo);
+            log.info("도 정보 불러오기: " + doInfo);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("도 정보 불러오기 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/si/{doStr}")
+    @Operation(summary = "시 정보 불러오기", description = "시 단위 지역정보를 불러온다.")
+    public ResponseEntity<?> getSiInfo(@PathVariable String doStr) throws Exception {
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            List<String> siInfo = officeService.getAllSiInfo(doStr);
+            returnData.put("siInfo", siInfo);
+            log.info("시 정보 불러오기: " + siInfo);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("시 정보 불러오기 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/gu/{si}")
+    @Operation(summary = "구 정보 불러오기", description = "구 단위 지역정보를 불러온다.")
+    public ResponseEntity<?> getGuInfo(@PathVariable String si) throws Exception {
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            List<String> guInfo = officeService.getAllGuInfo(si);
+            returnData.put("guInfo", guInfo);
+            log.info("구 정보 불러오기: " + guInfo);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("구 정보 불러오기 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/dong/{si}/{gu}")
+    @Operation(summary = "동 정보 불러오기", description = "동 단위 지역정보를 불러온다.")
+    public ResponseEntity<?> getDongInfo(@PathVariable String si, @PathVariable String gu) throws Exception {
+
+        try {
+            Map<String, Object> returnData = new HashMap<>();
+            List<String> dongInfo = officeService.getAllDongInfo(si, gu);
+            returnData.put("dongInfo", dongInfo);
+            log.info("동 정보 불러오기: " + dongInfo);
+
+            // 인증 코드 리턴
+            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("동 정보 불러오기 실패");
+            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
