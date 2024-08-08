@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.echocircleandroid.ui.theme.screens.LoginScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Community.CommunityMainScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CannotCollectDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CheckDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
@@ -50,7 +51,7 @@ fun AppMainScreen(navController: NavHostController) {
                 HomeCollectionScreen(navController)
             }
             composable(BottomNavItem.FreeSharing.screen_route) {
-                FreeSharingScreen()
+                CommunityMainScreen(navController = navController)
             }
             composable(BottomNavItem.MyPage.screen_route) {
                 MyPageScreen()

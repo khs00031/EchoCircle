@@ -15,4 +15,8 @@
     <string name="cannot_collect_device_screen">cannot found device screen</string>
     <string name="check_device_screen">check device screen</string>
     <string name="phoneCall_collect_screen">phone call collect screen</string>
+
+    <string name="community_main_screen">community main screen</string>
+
+
 </resources>
