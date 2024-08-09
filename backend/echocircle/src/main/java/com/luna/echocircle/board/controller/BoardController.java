@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,10 +73,15 @@ public class BoardController {
             @ApiResponse(responseCode = "200", description = "글 작성 성공"),
             @ApiResponse(responseCode = "500", description = "글 작성 실패 - 내부 서버 오류"),
     })
-    @PostMapping("/write")
-    public ResponseEntity<?> writeArticle(@RequestBody RequestWriteArticleDto requestWriteArticleDto) {
+    @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> writeArticle(@RequestPart RequestWriteArticleDto requestWriteArticleDto,
+                                          @RequestPart MultipartFile thumbnail,
+                                          @RequestPart MultipartFile[] images
+    ) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
+        log.info("thumbnail: "+ thumbnail);
+        log.info("images: "+ images.toString());
         try {
             articleService.write(requestWriteArticleDto);
             log.info("글 작성 성공");
@@ -88,6 +95,29 @@ public class BoardController {
             resultMap.put("httpStatus", status);
         }
         return new ResponseEntity<>(resultMap, status);
-
     }
+
+//    // 강의 생성하기
+//    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<Long> createLesson(@RequestPart CreateLessonRequest request,
+//                                             @RequestPart MultipartFile[] imgFiles,
+//                                             @RequestPart List<VideoVO> videoVOList,
+//                                             @RequestPart MultipartFile[] videoFiles) throws Exception {
+////        if (!this.userIsLogged()){ return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+////        if (!user.isRoleTutor()) {
+////            // Students are not authorized to add new lessons
+////            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+////        }
+//        log.info("fee:{},images:{}, videos:{}",request.getFee(),imgFiles, videoFiles);
+//        if (this.user().getRole() != 1){
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+//        Lesson lesson = lessonService.save(request);
+//        Long id = uploadDataService.upload(imgFiles, videoFiles, lesson, videoVOList);
+//
+//        return ResponseEntity
+//                .ok()
+//                .body(id);
+//    }
+
 }

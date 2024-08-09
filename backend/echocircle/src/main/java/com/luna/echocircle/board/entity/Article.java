@@ -20,7 +20,7 @@ public class Article {
     @Column(name = "aid")
     private Long aid;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "mid", nullable = false)  // `nullable = false` 추가
     @NotNull  // `@NotNull` 어노테이션 추가
     private Member member;
