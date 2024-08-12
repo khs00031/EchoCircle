@@ -1,4 +1,4 @@
-package com.luna.echocircle.board.S3Image;
+package com.luna.echocircle.S3Image;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

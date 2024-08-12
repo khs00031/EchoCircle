@@ -1,6 +1,6 @@
 package com.luna.echocircle.board.service;
 
-import com.luna.echocircle.board.S3Image.S3Uploader;
+import com.luna.echocircle.S3Image.S3Uploader;
 import com.luna.echocircle.board.dto.RequestWriteArticleDto;
 import com.luna.echocircle.board.entity.Article;
 import com.luna.echocircle.board.repository.ArticleRepository;

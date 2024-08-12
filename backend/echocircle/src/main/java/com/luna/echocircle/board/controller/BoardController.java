@@ -1,6 +1,6 @@
 package com.luna.echocircle.board.controller;
 
-import com.luna.echocircle.board.S3Image.S3Uploader;
+import com.luna.echocircle.S3Image.S3Uploader;
 import com.luna.echocircle.board.dto.RequestWriteArticleDto;
 import com.luna.echocircle.board.dto.ResponseAllArticleDto;
 import com.luna.echocircle.board.dto.ResponseArticleDto;

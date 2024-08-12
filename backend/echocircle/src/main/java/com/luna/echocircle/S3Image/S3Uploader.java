@@ -1,4 +1,4 @@
-package com.luna.echocircle.board.S3Image;
+package com.luna.echocircle.S3Image;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -26,6 +26,7 @@ public class S3Uploader {
 
     public final String ECHO = "echocircle";
     public final String IMAGES = "images";
+    public final String PRODUCT = "product";
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
