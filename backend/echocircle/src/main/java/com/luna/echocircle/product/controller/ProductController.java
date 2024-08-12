@@ -10,8 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,12 +55,13 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "회원가입 성공"),
             @ApiResponse(responseCode = "500", description = "회원가입 실패 - 내부 서버 오류"),
     })
-    @PostMapping
-    public ResponseEntity<?> registProduct(@RequestBody RequestRegistProductDto requestRegistProductDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> registProduct(@RequestPart RequestRegistProductDto requestRegistProductDto,
+                                           @RequestPart MultipartFile image) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         try {
-            productService.addProduct(requestRegistProductDto);
+            productService.addProduct(requestRegistProductDto, image);
             log.info("제품등록 성공");
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "제품등록 성공");

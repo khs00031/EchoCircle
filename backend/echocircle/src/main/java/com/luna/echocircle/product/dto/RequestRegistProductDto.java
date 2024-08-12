@@ -8,4 +8,5 @@ import lombok.Data;
 public class RequestRegistProductDto {
     String name;
     String barcode;
+    String image;
 }
