@@ -50,10 +50,10 @@ public class ProductController {
         }
     }
 
-    @Operation(summary = "회원가입", description = "Member 객체를 이용해 회원가입을 하는 API")
+    @Operation(summary = "제품등록", description = "가전제품 정보를 등록")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "500", description = "회원가입 실패 - 내부 서버 오류"),
+            @ApiResponse(responseCode = "200", description = "제품등록 성공"),
+            @ApiResponse(responseCode = "500", description = "제품등록 실패 - 내부 서버 오류"),
     })
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> registProduct(@RequestPart RequestRegistProductDto requestRegistProductDto,
