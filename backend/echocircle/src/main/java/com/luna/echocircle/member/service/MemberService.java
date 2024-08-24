@@ -6,10 +6,10 @@ import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder; // PasswordEncoder 임포트
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -17,7 +17,6 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder; // PasswordEncoder 주입
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -34,28 +33,40 @@ public class MemberService {
     public Member regist(RequestRegistDto requestRegistDto) {
         log.info("회원가입 서비스 호출 - ");
 
-        // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(requestRegistDto.getPw());
-
         // Member 객체 생성
         Member member = Member.builder()
                 .email(requestRegistDto.getEmail())
                 .nickname(requestRegistDto.getNickname())
                 .address(requestRegistDto.getAddress())
                 .phone(requestRegistDto.getPhone())
-                .pw(encodedPassword) // 인코딩된 비밀번호 설정
+                .pw(requestRegistDto.getPw())
                 .build();
 
         // Member 객체 저장
         return memberRepository.save(member);
     }
 
-    public String login(RequestLoginDto requestLoginDto) {
+    public String login(RequestLoginDto requestLoginDto) throws Exception {
         log.info("로그인 서비스 호출 - ");
         Member member = memberRepository.findMemberByEmail(requestLoginDto.getEmail());
+        if (member == null)
+            throw new Exception("존재하지 않는 Email");
+        if (!member.getPw().equals(requestLoginDto.getPw()))
+            throw new Exception("비밀번호 틀림");
+        String token = generateToken();
+        member.setToken(token);
+        memberRepository.save(member);
+        return token;
+    }
 
-        // 로그인 로직 추가 필요 (비밀번호 비교 및 JWT 생성 등)
-        return "";
+    public String generateToken() {
+        Random random = new Random();
+        String token = "";
+        for (int i = 0; i < 2; i++)
+            token += (char)('a' + random.nextInt(26));
+        for (int i = 0; i < 2; i++)
+            token += random.nextInt(10);
+        return token;
     }
 
     public Boolean existNickname(String nickname) {

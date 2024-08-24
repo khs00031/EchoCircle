@@ -54,23 +54,23 @@ public class MemberController {
 
     }
 
-    @Operation(summary = "회원가입", description = "Member 객체를 이용해 회원가입을 하는 API")
+    @Operation(summary = "로그인", description = "로그인 후 Token을 반환하는 API")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "500", description = "회원가입 실패 - 내부 서버 오류"),
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "500", description = "로그인 실패 - 내부 서버 오류"),
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto requestLoginDto) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         try {
-//            memberService.regist(requestLoginDto);
-            log.info("회원가입 성공");
+            String token = memberService.login(requestLoginDto);
+            log.info("로그인 성공");
             status = HttpStatus.ACCEPTED;
-            resultMap.put("message", "회원가입 성공");
-            resultMap.put("httpStatus", status);
+            resultMap.put("message", "로그인 성공");
+            resultMap.put("token", token);
         } catch (Exception e) {
-            log.error("회원가입 실패 - " + e.getMessage());
+            log.error("로그인 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", e.getMessage());
             resultMap.put("httpStatus", status);
