@@ -1,6 +1,5 @@
 package com.luna.echocircle.member.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestRegistDto {
+public class RequestLoginDto {
     private String email;
     private String pw;
-    private String nickname;
-    private String address;
-    private String phone;
 }
