@@ -1,7 +1,9 @@
 package com.luna.echocircle.member.controller;
 
 import com.luna.echocircle.member.dto.RequestLoginDto;
+import com.luna.echocircle.member.dto.RequestMyPageDto;
 import com.luna.echocircle.member.dto.RequestRegistDto;
+import com.luna.echocircle.member.dto.ResponseMypageDto;
 import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,6 +73,31 @@ public class MemberController {
             resultMap.put("token", token);
         } catch (Exception e) {
             log.error("로그인 실패 - " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }
+        return new ResponseEntity<>(resultMap, status);
+
+    }
+
+    @Operation(summary = "마이페이지", description = "마이페이지 불러오는 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "마이페이지 로드 성공"),
+            @ApiResponse(responseCode = "500", description = "마이페이지 로드 실패 - 내부 서버 오류"),
+    })
+    @PostMapping("/mypage")
+    public ResponseEntity<?> mypage(@RequestBody RequestMyPageDto requestMyPageDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        try {
+            ResponseMypageDto mypage = memberService.loadMypage(requestMyPageDto);
+            log.info("마이페이지 불러오기 성공");
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "마이페이지 불러오기 성공");
+            resultMap.put("mypage", mypage);
+        } catch (Exception e) {
+            log.error("마이페이지 불러오기 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", e.getMessage());
             resultMap.put("httpStatus", status);
