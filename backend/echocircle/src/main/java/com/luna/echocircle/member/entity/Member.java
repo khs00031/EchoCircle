@@ -21,6 +21,11 @@ public class Member {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "pw", unique = true, nullable = false)
+    private String pw;
+
+    @Column(name = "token", unique = true, nullable = false)
+    private String token;
     @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 

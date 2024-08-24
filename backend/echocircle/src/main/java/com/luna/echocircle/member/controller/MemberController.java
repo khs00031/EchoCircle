@@ -1,5 +1,6 @@
 package com.luna.echocircle.member.controller;
 
+import com.luna.echocircle.member.dto.RequestLoginDto;
 import com.luna.echocircle.member.dto.RequestRegistDto;
 import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.service.MemberService;
@@ -39,6 +40,31 @@ public class MemberController {
         HttpStatus status;
         try {
             memberService.regist(requestRegistDto);
+            log.info("회원가입 성공");
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "회원가입 성공");
+            resultMap.put("httpStatus", status);
+        } catch (Exception e) {
+            log.error("회원가입 실패 - " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }
+        return new ResponseEntity<>(resultMap, status);
+
+    }
+
+    @Operation(summary = "회원가입", description = "Member 객체를 이용해 회원가입을 하는 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
+            @ApiResponse(responseCode = "500", description = "회원가입 실패 - 내부 서버 오류"),
+    })
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody RequestLoginDto requestLoginDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        try {
+//            memberService.regist(requestLoginDto);
             log.info("회원가입 성공");
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "회원가입 성공");
