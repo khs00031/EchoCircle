@@ -1,7 +1,11 @@
 package com.luna.echocircle.member.service;
 
+import com.luna.echocircle.board.entity.Article;
+import com.luna.echocircle.board.repository.ArticleRepository;
 import com.luna.echocircle.member.dto.RequestLoginDto;
+import com.luna.echocircle.member.dto.RequestMyPageDto;
 import com.luna.echocircle.member.dto.RequestRegistDto;
+import com.luna.echocircle.member.dto.ResponseMypageDto;
 import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,7 @@ import java.util.Random;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ArticleRepository articleRepository;
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -67,6 +72,20 @@ public class MemberService {
         for (int i = 0; i < 2; i++)
             token += random.nextInt(10);
         return token;
+    }
+
+    public ResponseMypageDto loadMypage(RequestMyPageDto requestMyPageDto) throws Exception{
+        Member member = memberRepository.findMemberByEmail(requestMyPageDto.getEmail());
+        if(!member.getToken().equals(requestMyPageDto.getToken()))
+            throw new Exception("토큰 만료");
+
+        List<Article> articleList = articleRepository.findByMember_Id(member.getId());
+        ResponseMypageDto responseMypageDto = ResponseMypageDto.builder()
+                .member(member)
+                .articleList(articleList)
+                .build();
+
+        return responseMypageDto;
     }
 
     public Boolean existNickname(String nickname) {
