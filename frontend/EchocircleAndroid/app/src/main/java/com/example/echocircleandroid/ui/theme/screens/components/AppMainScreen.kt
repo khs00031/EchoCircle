@@ -23,6 +23,9 @@ import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.Che
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyApplianceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageViewModel
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyWrittenPostScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController) {
@@ -54,7 +57,13 @@ fun AppMainScreen(navController: NavHostController) {
                 CommunityMainScreen(navController = navController)
             }
             composable(BottomNavItem.MyPage.screen_route) {
-                MyPageScreen()
+                MyPageScreen(navController, myPageViewModel = MyPageViewModel())
+            }
+            composable("my_written_posts") {
+                MyWrittenPostScreen(navController)
+            }
+            composable("my_appliances") {
+                MyApplianceScreen(navController)
             }
             composable("start_camera"){
                 StartCameraScreen(navController)
