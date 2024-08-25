@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,13 +70,20 @@ public class MemberController {
             String token = memberService.login(requestLoginDto);
             log.info("로그인 성공");
             status = HttpStatus.ACCEPTED;
+            resultMap.put("httpStatus", status);
             resultMap.put("message", "로그인 성공");
             resultMap.put("token", token);
-        } catch (Exception e) {
+        }catch (InvalidCredentialsException e){
+            log.error("로그인 실패 - " + e.getMessage());
+            status = HttpStatus.UNAUTHORIZED;
+            resultMap.put("httpStatus", status);
+            resultMap.put("message", e.getMessage());
+        }
+        catch (Exception e) {
             log.error("로그인 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", e.getMessage());
             resultMap.put("httpStatus", status);
+            resultMap.put("message", e.getMessage());
         }
         return new ResponseEntity<>(resultMap, status);
 

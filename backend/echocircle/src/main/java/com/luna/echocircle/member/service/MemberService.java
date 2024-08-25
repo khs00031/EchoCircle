@@ -10,6 +10,7 @@ import com.luna.echocircle.member.entity.Member;
 import com.luna.echocircle.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,9 +56,9 @@ public class MemberService {
         log.info("로그인 서비스 호출 - ");
         Member member = memberRepository.findMemberByEmail(requestLoginDto.getEmail());
         if (member == null)
-            throw new Exception("존재하지 않는 Email");
+            throw new InvalidCredentialsException("존재하지 않는 Email");
         if (!member.getPw().equals(requestLoginDto.getPw()))
-            throw new Exception("비밀번호 틀림");
+            throw new InvalidCredentialsException("비밀번호 틀림");
         String token = generateToken();
         member.setToken(token);
         memberRepository.save(member);
