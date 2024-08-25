@@ -27,6 +27,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyApplia
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageViewModel
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyWrittenPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController) {
@@ -35,7 +36,9 @@ fun AppMainScreen(navController: NavHostController) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != "login" && currentRoute != "member_login_screen") {
+            if (currentRoute != "login" &&
+                currentRoute != "member_login_screen" &&
+                currentRoute != "member_regist_screen") {
                 BottomNavigationBar(navController = navController)
             }
         }
@@ -48,8 +51,11 @@ fun AppMainScreen(navController: NavHostController) {
             composable("login") {
                 LoginScreen(navController)
             }
-            composable("member_login_screen") {  // 추가된 화면
+            composable("member_login_screen") {  // 회원 로그인 화면
                 MemberLoginScreen(navController)
+            }
+            composable("member_regist_screen") {  // 회원가입 화면
+                MemberRegistScreen(navController)
             }
             composable(BottomNavItem.DirectProcessing.screen_route) {
                 UserGuideScreen(navController)
