@@ -1,6 +1,5 @@
-package com.example.echocircleandroid.ui.theme.screens.components
+package com.example.echocircleandroid.ui.theme.screens.components.Member
 
-import MemberLoginViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions

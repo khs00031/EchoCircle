@@ -1,7 +1,6 @@
 package com.example.echocircleandroid.ui.theme.screens.components
 
 import BottomNavigationBar
-import FreeSharingScreen
 import HomeCollectionScreen
 import MyPageScreen
 import NavItem
@@ -23,6 +22,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.Che
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController) {

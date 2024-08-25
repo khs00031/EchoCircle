@@ -1,8 +1,9 @@
+package com.example.echocircleandroid.ui.theme.screens.components.Member
+
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.example.echocircleandroid.ui.theme.RetrofitInstance
 import com.example.echocircleandroid.ui.theme.screens.data.LoginRequest
 import com.example.echocircleandroid.ui.theme.screens.data.LoginResponse
