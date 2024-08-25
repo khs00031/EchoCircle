@@ -2,6 +2,12 @@ server:
   servlet:
     context-path: /api
   port: 8080
+  ssl:
+    enabled: true
+    key-store: src/main/resources/AN-keystore.p12
+    key-store-password: Kimchoilee1!
+    key-store-type: PKCS12
+    key-alias: AN-keystore
 
 spring:
   application:
@@ -26,3 +32,5 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+
+
