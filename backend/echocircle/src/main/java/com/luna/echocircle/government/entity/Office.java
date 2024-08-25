@@ -17,7 +17,7 @@ public class Office {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pid")
+    @Column(name = "oid")
     private long id;
 
     @Column(name = "do", nullable = false)
