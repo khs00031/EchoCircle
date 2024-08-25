@@ -84,6 +84,7 @@ fun MemberLoginScreen(navController: NavHostController) {
                     } else {
                         errorMessage = null // 오류 메시지 초기화
                         coroutineScope.launch {
+                            // MemberLoginViewModel.kt로 넘겨서 로그인 처리
                             viewModel.login()
                         }
                     }
@@ -103,7 +104,7 @@ fun MemberLoginScreen(navController: NavHostController) {
                 Text(text = it, color = Color.Red)
             }
 
-            // 로그인 응답 메시지 표시
+            // MemberLoginViewModel.kt에서 처리된 로그인 결과 출력 조치(it변수에 저장돼있음)
             loginResponse?.let {
                 Spacer(modifier = Modifier.height(16.dp))
                 if (it.httpStatus == "ACCEPTED") {
@@ -111,6 +112,7 @@ fun MemberLoginScreen(navController: NavHostController) {
                     // 로그인 성공 후 화면 이동
                     navController.navigate(BottomNavItem.DirectProcessing.screen_route)
                 } else {
+                    // 로그인 실패, 에러 메시지 출력
                     Text(text = it.message, color = Color.Red)
                 }
             }

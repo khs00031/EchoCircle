@@ -43,10 +43,11 @@ class MemberLoginViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try {
                 val loginRequest = LoginRequest(email.value, password.value)
-                val response = apiService.login(loginRequest)
+                val response = apiService.login(loginRequest)   // BE서버로 request보내기
                 _loginResponse.value = response
 
                 if (response.httpStatus == "ACCEPTED") {
+                    // 로그인 성공, email 및 token sharedPreference 저장
                     SharedPreferencesUtil.saveAuthToken(context, response.token ?: "")
                     SharedPreferencesUtil.saveUserEmail(context, email.value)
                 }
@@ -56,12 +57,12 @@ class MemberLoginViewModel(application: Application) : AndroidViewModel(applicat
                 val errorMessage = parseErrorMessage(errorBody)
                 _loginResponse.value = LoginResponse(
                     httpStatus = "UNAUTHORIZED",
-                    message = errorMessage
+                    message = errorMessage  // 인증 실패 메시지
                 )
             } catch (e: IOException) {
                 _loginResponse.value = LoginResponse(
                     httpStatus = "INTERNAL_SERVER_ERROR",
-                    message = "서버 연결 실패"
+                    message = "서버 내부 오류"    // 서버 내부 오류
                 )
             }
         }
