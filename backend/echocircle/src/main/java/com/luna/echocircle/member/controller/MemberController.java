@@ -73,13 +73,12 @@ public class MemberController {
             resultMap.put("httpStatus", status);
             resultMap.put("message", "로그인 성공");
             resultMap.put("token", token);
-        }catch (InvalidCredentialsException e){
+        } catch (InvalidCredentialsException e) {
             log.error("로그인 실패 - " + e.getMessage());
             status = HttpStatus.UNAUTHORIZED;
             resultMap.put("httpStatus", status);
             resultMap.put("message", e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("로그인 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("httpStatus", status);
@@ -114,7 +113,6 @@ public class MemberController {
     }
 
 
-
     @Operation(summary = "마이페이지", description = "마이페이지 불러오는 API")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "마이페이지 로드 성공"),
@@ -130,6 +128,11 @@ public class MemberController {
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "마이페이지 불러오기 성공");
             resultMap.put("mypage", mypage);
+        } catch (InvalidCredentialsException e) {
+            log.error("토큰만료, 마이페이지 불러오기 실패 - " + e.getMessage());
+            status = HttpStatus.UNAUTHORIZED;
+            resultMap.put("httpStatus", status);
+            resultMap.put("message", e.getMessage());
         } catch (Exception e) {
             log.error("마이페이지 불러오기 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;

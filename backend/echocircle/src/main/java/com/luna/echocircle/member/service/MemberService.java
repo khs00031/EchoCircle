@@ -78,7 +78,7 @@ public class MemberService {
     public ResponseMypageDto loadMypage(RequestMyPageDto requestMyPageDto) throws Exception{
         Member member = memberRepository.findMemberByEmail(requestMyPageDto.getEmail());
         if(!member.getToken().equals(requestMyPageDto.getToken()))
-            throw new Exception("토큰 만료");
+            throw new InvalidCredentialsException("토큰만료");
 
         List<Article> articleList = articleRepository.findByMember_Id(member.getId());
         ResponseMypageDto responseMypageDto = ResponseMypageDto.builder()
