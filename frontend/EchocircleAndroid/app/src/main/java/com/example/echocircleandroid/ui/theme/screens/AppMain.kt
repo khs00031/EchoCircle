@@ -11,7 +11,7 @@ enum class EchoCircleScreen(){
 }
 
 @Composable
-fun MainApp() {
+fun MainApp(startDestination: String) {
     val navController = rememberNavController()
-    AppMainScreen(navController = navController)
+    AppMainScreen(navController = navController, startDestination = startDestination)
 }
