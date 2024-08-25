@@ -1,5 +1,6 @@
 package com.luna.echocircle.product.document;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.bson.types.ObjectId;
@@ -11,7 +12,7 @@ import org.springframework.data.annotation.Id;
 public class Product {
     @Id
     private ObjectId id;
-
+    @NotNull
     private String name;
     private String barcode;
     private String image;

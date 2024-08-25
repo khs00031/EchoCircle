@@ -28,28 +28,28 @@ public class Article {
     @Column(name = "category")
     private int category;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "registTime")
+    @Column(name = "registTime", nullable = false)
     private LocalDateTime registerTime;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", nullable = false)
     private String thumbnail;
 
 //    @Column(name = "imagesDir")
 //    private String imagesDir;
 
-    @Column(name = "shared")
+    @Column(name = "shared", nullable = false)
     private boolean shared;
 
-    @Column(name = "views")
+    @Column(name = "views", nullable = false)
     private int view;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
 //    @OneToMany(mappedBy = "article")
