@@ -89,6 +89,32 @@ public class MemberController {
 
     }
 
+    @Operation(summary = "로그아웃", description = "로그아웃 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "500", description = "로그아웃 실패 - 내부 서버 오류"),
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody RequestMyPageDto requestMyPageDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        try {
+            memberService.logout(requestMyPageDto);
+            log.info("로그아웃 성공");
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "로그아웃 성공");
+        } catch (Exception e) {
+            log.error("로그아웃 실패 - " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }
+        return new ResponseEntity<>(resultMap, status);
+
+    }
+
+
+
     @Operation(summary = "마이페이지", description = "마이페이지 불러오는 API")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "마이페이지 로드 성공"),

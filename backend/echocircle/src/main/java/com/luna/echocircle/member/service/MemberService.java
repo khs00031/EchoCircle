@@ -89,6 +89,14 @@ public class MemberService {
         return responseMypageDto;
     }
 
+    public boolean logout(RequestMyPageDto requestMyPageDto){
+        Member member = memberRepository.findMemberByEmail(requestMyPageDto.getEmail());
+        member.setToken("");
+        memberRepository.save(member);
+        return true;
+    }
+
+
     public Boolean existNickname(String nickname) {
         log.info("회원 서비스 - 닉네임 중복 체크");
         Member member = memberRepository.findMemberByNickname(nickname);
