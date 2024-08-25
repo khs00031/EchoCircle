@@ -30,7 +30,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLo
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
 
 @Composable
-fun AppMainScreen(navController: NavHostController) {
+fun AppMainScreen(navController: NavHostController, startDestination: String) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -45,7 +45,7 @@ fun AppMainScreen(navController: NavHostController) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("login") {

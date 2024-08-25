@@ -18,6 +18,10 @@ interface ApiService {
     @POST("/api/member/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 
+    // 로그아웃 요청을 위한 POST 메서드 정의
+    @POST("/api/member/logout")
+    suspend fun logout(@Body request: MypageRequest): MyPageResponse
+
     // 주석 처리된 닉네임 가져오기 메서드 예시 (추가 구현 가능)
     @POST("/api/member/mypage")
     suspend fun getNickname(@Body request: MypageRequest): MyPageResponse
