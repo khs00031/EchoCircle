@@ -101,12 +101,13 @@ public class MemberController {
             memberService.logout(requestMyPageDto);
             log.info("로그아웃 성공");
             status = HttpStatus.ACCEPTED;
+            resultMap.put("httpStatus", status);
             resultMap.put("message", "로그아웃 성공");
         } catch (Exception e) {
             log.error("로그아웃 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", e.getMessage());
             resultMap.put("httpStatus", status);
+            resultMap.put("message", e.getMessage());
         }
         return new ResponseEntity<>(resultMap, status);
 
