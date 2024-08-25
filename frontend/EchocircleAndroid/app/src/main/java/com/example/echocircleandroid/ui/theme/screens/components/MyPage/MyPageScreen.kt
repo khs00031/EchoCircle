@@ -16,20 +16,31 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.echocircleandroid.R
+import com.example.echocircleandroid.ui.theme.RetrofitInstance
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageViewModel
+import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
+import com.example.echocircleandroid.ui.theme.screens.data.SharedPreferencesUtil
+import kotlinx.coroutines.launch
 
 @Composable
 fun MyPageScreen(navController: NavController, myPageViewModel: MyPageViewModel) {
     val nickname by myPageViewModel.nickname
+
+    // logout test용 시작
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope() // CoroutineScope 설정
+    // logout test용 끝, 나중에 지울것.
 
     Column(
         modifier = Modifier
@@ -162,6 +173,41 @@ fun MyPageScreen(navController: NavController, myPageViewModel: MyPageViewModel)
                 )
             }
         }
+
+        // Logout Button 시작
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    val email = SharedPreferencesUtil.getUserEmail(context) ?: return@launch
+                    val token = SharedPreferencesUtil.getAuthToken(context) ?: return@launch
+
+                    try {
+                        val response = RetrofitInstance.api.logout(MypageRequest(email, token))
+                        if (response.httpStatus == "ACCEPTED") {
+                            // 로그아웃 성공 처리
+                            SharedPreferencesUtil.clearAll(context) // 모든 SharedPreferences 데이터 삭제
+                            navController.navigate("login")
+                        } else {
+                            // 오류 메시지 처리
+                        }
+                    } catch (e: Exception) {
+                        // 오류 처리
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = "로그아웃",
+                fontSize = 16.sp,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+        // logout button 끝, 나중에 지울것
 
     }
 }
