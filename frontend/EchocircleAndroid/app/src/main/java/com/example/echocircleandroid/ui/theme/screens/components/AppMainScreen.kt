@@ -6,6 +6,7 @@ import MyPageScreen
 import NavItem
 import StartCameraScreen
 import UserGuideScreen
+import android.app.Application
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,6 +23,9 @@ import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.Che
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyApplianceScreen
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageViewModel
+import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyWrittenPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
 
 @Composable
@@ -57,7 +61,13 @@ fun AppMainScreen(navController: NavHostController) {
                 CommunityMainScreen(navController = navController)
             }
             composable(BottomNavItem.MyPage.screen_route) {
-                MyPageScreen()
+                MyPageScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))
+            }
+            composable("my_written_posts") {
+                MyWrittenPostScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))
+            }
+            composable("my_appliances") {
+                MyApplianceScreen(navController)
             }
             composable("start_camera") {
                 StartCameraScreen(navController)

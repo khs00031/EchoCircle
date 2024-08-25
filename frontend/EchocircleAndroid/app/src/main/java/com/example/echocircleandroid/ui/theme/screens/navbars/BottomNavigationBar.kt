@@ -45,6 +45,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     navController.navigate(item.screen_route) {
                         navController.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
+                                inclusive = item == BottomNavItem.MyPage
                                 saveState = true
                             }
                         }
