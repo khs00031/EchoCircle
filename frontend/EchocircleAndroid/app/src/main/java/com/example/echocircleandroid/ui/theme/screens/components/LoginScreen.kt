@@ -72,7 +72,7 @@ fun LoginScreen(navController : NavHostController){
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate("member_login_screen") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -81,7 +81,7 @@ fun LoginScreen(navController : NavHostController){
 //                colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.yellow))
             ) {
-                Text(text = "카카오 로그인", color = Color.Black)
+                Text(text = "회원 로그인", color = Color.Black)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

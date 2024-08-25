@@ -28,4 +28,5 @@ sealed class NavItem(
     data object PhoneCallCollectScreen : NavItem(R.string.phoneCall_collect_screen,R.string.phoneCall_collect_screen.toString())
 
     data object CommunityMainScreen : NavItem(R.string.community_main_screen,R.string.community_main_screen.toString())
+//    data object MemberLoginScreen : NavItem(R.string.member_login_screen,R.string.member_login_screen.toString())
 }

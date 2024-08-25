@@ -1,7 +1,6 @@
 package com.example.echocircleandroid.ui.theme.screens.components
 
 import BottomNavigationBar
-import FreeSharingScreen
 import HomeCollectionScreen
 import MyPageScreen
 import NavItem
@@ -23,6 +22,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.Che
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController) {
@@ -31,7 +31,7 @@ fun AppMainScreen(navController: NavHostController) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != "login") {
+            if (currentRoute != "login" && currentRoute != "member_login_screen") {
                 BottomNavigationBar(navController = navController)
             }
         }
@@ -41,8 +41,11 @@ fun AppMainScreen(navController: NavHostController) {
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("login"){
+            composable("login") {
                 LoginScreen(navController)
+            }
+            composable("member_login_screen") {  // 추가된 화면
+                MemberLoginScreen(navController)
             }
             composable(BottomNavItem.DirectProcessing.screen_route) {
                 UserGuideScreen(navController)
@@ -56,26 +59,24 @@ fun AppMainScreen(navController: NavHostController) {
             composable(BottomNavItem.MyPage.screen_route) {
                 MyPageScreen()
             }
-            composable("start_camera"){
+            composable("start_camera") {
                 StartCameraScreen(navController)
             }
-
-            composable(NavItem.FoundDeviceScreen.screen_route){
+            composable(NavItem.FoundDeviceScreen.screen_route) {
                 FoundDeviceScreen(navController)
             }
-            composable(NavItem.NotFoundDeviceScreen.screen_route){
+            composable(NavItem.NotFoundDeviceScreen.screen_route) {
                 NotFoundDeviceScreen(navController)
             }
-            composable(NavItem.CheckDeviceScreen.screen_route){
+            composable(NavItem.CheckDeviceScreen.screen_route) {
                 CheckDeviceScreen(navController)
             }
-            composable(NavItem.CannotCollectDeviceScreen.screen_route){
+            composable(NavItem.CannotCollectDeviceScreen.screen_route) {
                 CannotCollectDeviceScreen(navController)
             }
-            composable(NavItem.PhoneCallCollectScreen.screen_route){
+            composable(NavItem.PhoneCallCollectScreen.screen_route) {
                 PhoneCallCollectScreen()
             }
-
         }
     }
 }
