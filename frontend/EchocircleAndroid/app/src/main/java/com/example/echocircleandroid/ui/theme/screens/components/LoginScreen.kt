@@ -57,21 +57,6 @@ fun LoginScreen(navController : NavHostController){
             Spacer(modifier = Modifier.height(40.dp))
 
             Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White
-                )
-            ) {
-                Text(text = "구글 로그인", color = Color.Black)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
                 onClick = { navController.navigate("member_login_screen") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -95,6 +80,21 @@ fun LoginScreen(navController : NavHostController){
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))
             ) {
                 Text(text = "비회원 로그인", color = Color.Black)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = { navController.navigate("member_regist_screen") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White
+                )
+            ) {
+                Text(text = "회원가입", color = Color.Black)
             }
         }
     }
