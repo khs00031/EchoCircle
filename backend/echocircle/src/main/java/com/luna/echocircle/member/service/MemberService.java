@@ -28,7 +28,10 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member getMember(String email) {
+    public Member getMember(String email) throws Exception{
+        Member member = memberRepository.findMemberByEmail(email);
+        if(member==null)
+            throw new NullPointerException("존재하지 않는 Email");
         return memberRepository.findMemberByEmail(email);
     }
 

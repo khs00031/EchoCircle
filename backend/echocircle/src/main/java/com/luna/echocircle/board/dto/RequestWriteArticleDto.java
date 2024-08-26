@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class RequestWriteArticleDto {
-    long mid;    // 작성자 정보
+    String email;    // 작성자 정보
     int category;    // 카테고리id
     String title;   // 제목
     String content;    // 내용
