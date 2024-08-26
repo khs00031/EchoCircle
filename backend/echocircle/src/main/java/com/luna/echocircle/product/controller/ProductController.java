@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/product")
@@ -46,7 +47,7 @@ public class ProductController {
             status = HttpStatus.ACCEPTED;
             resultMap.put("products", productList);
             resultMap.put("httpStatus", status);
-        } catch (NullPointerException e) {
+        } catch (NoSuchElementException e) {
             log.info("제품 가져오기 실패 : " + e.getMessage());
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", e.getMessage());
