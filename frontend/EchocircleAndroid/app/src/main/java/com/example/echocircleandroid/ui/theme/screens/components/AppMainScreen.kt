@@ -4,7 +4,7 @@ import BottomNavigationBar
 import HomeCollectionScreen
 import MyPageScreen
 import NavItem
-import StartCameraScreen
+//import StartCameraScreen
 import UserGuideScreen
 import android.app.Application
 import androidx.compose.foundation.layout.padding
@@ -28,6 +28,10 @@ import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageVi
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyWrittenPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Product.GetTextWithCameraScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Product.InsertModelScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Product.ProdcutCollectScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Product.SelectModelScreen
 
 @Composable
 fun AppMainScreen(navController: NavHostController, startDestination: String) {
@@ -57,9 +61,21 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
             composable("member_regist_screen") {  // 회원가입 화면
                 MemberRegistScreen(navController)
             }
-            composable(BottomNavItem.DirectProcessing.screen_route) {
-                UserGuideScreen(navController)
+            composable("product_collect_screen") {  // 제품처리 화면
+                ProdcutCollectScreen(navController)
             }
+            composable("get_text_with_camera_screen") {  // 카메라 화면
+                GetTextWithCameraScreen(navController)
+            }
+            composable("insert_model_screen") {  // 모델명 기반 검색 화면
+                InsertModelScreen(navController)
+            }
+            composable("select_model_screen") {  // 모델명 없을때 크기, 종류 선택화면
+                SelectModelScreen(navController)
+            }
+//            composable(BottomNavItem.DirectProcessing.screen_route) {
+//                UserGuideScreen(navController)
+//            }
             composable(BottomNavItem.HomeCollection.screen_route) {
                 HomeCollectionScreen(navController)
             }
@@ -75,9 +91,9 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
             composable("my_appliances") {
                 MyApplianceScreen(navController)
             }
-            composable("start_camera") {
-                StartCameraScreen(navController)
-            }
+//            composable("start_camera") {
+//                StartCameraScreen(navController)
+//            }
             composable(NavItem.FoundDeviceScreen.screen_route) {
                 FoundDeviceScreen(navController)
             }

@@ -17,7 +17,8 @@ import com.example.echocircleandroid.R
 fun BottomNavigationBar(navController: NavHostController) {
 
     val items = listOf(
-        BottomNavItem.DirectProcessing,
+//        BottomNavItem.DirectProcessing,
+        BottomNavItem.ProductCollect,
         BottomNavItem.HomeCollection,
         BottomNavItem.FreeSharing,
         BottomNavItem.MyPage
