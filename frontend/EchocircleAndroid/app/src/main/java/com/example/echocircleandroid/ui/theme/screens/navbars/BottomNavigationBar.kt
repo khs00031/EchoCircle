@@ -17,7 +17,7 @@ import com.example.echocircleandroid.R
 fun BottomNavigationBar(navController: NavHostController) {
 
     val items = listOf(
-//        BottomNavItem.DirectProcessing,
+        // BottomNavItem.DirectProcessing,
         BottomNavItem.ProductCollect,
         BottomNavItem.HomeCollection,
         BottomNavItem.FreeSharing,
@@ -42,9 +42,12 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = currentRoute == item.screen_route,
                 onClick = {
                     // 현재 스택을 초기화하고 새로운 화면으로 이동
-                    navController.navigate(item.screen_route) {
-                        popUpTo(0) { inclusive = true } // 스택을 초기화
-                        launchSingleTop = true
+                    // 현재 경로가 선택된 경로와 다를 경우에만 navigate 호출
+                    if (currentRoute != item.screen_route) {
+                        navController.navigate(item.screen_route) {
+                            popUpTo(0) { inclusive = true } // 스택을 초기화
+                            launchSingleTop = true
+                        }
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
@@ -58,3 +61,4 @@ fun BottomNavigationBar(navController: NavHostController) {
         }
     }
 }
+
