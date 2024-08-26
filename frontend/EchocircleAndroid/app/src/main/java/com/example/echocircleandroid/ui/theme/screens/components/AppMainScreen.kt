@@ -64,7 +64,7 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                 HomeCollectionScreen(navController)
             }
             composable(BottomNavItem.FreeSharing.screen_route) {
-                CommunityMainScreen(navController = navController)
+                CommunityMainScreen(navController = navController, communityViewModel = CommunityViewModel(application = Application()))
             }
             composable(BottomNavItem.MyPage.screen_route) {
                 MyPageScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))

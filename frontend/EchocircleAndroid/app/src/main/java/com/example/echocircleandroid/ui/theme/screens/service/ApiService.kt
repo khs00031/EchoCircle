@@ -7,9 +7,15 @@ import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistResponse
 import com.example.echocircleandroid.ui.theme.screens.data.CheckDuplicateResponse
+import com.example.echocircleandroid.ui.theme.screens.data.GetArticlesResponse
+import com.example.echocircleandroid.ui.theme.screens.data.RegistArticleResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
@@ -37,4 +43,8 @@ interface ApiService {
     // 닉네임 중복 확인을 위한 GET 메서드 정의
     @GET("/api/member/checkNickname/{nickname}")
     suspend fun checkNicknameDuplicate(@Path("nickname") nickname: String): CheckDuplicateResponse
+
+    // 모든 글 조회
+    @GET("/api/board")
+    suspend fun getArticles(): GetArticlesResponse
 }
