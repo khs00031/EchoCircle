@@ -42,10 +42,10 @@ public class ProductController {
         HttpStatus status;
 
         try {
-            List<Product> productList = productService.getProductByCode(code);
-            log.info("제품 검색 결과: " + productList);
+            Product product = productService.getProductByCode(code);
+            log.info("제품 검색 결과: " + product);
             status = HttpStatus.ACCEPTED;
-            resultMap.put("products", productList);
+            resultMap.put("product", product);
             resultMap.put("httpStatus", status);
         } catch (NoSuchElementException e) {
             log.info("제품 가져오기 실패 : " + e.getMessage());
