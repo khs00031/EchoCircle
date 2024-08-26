@@ -2,13 +2,12 @@ package com.luna.echocircle.product.service;
 
 
 import com.luna.echocircle.S3Image.S3Uploader;
-import com.luna.echocircle.product.document.Product;
+import com.luna.echocircle.product.entity.Product;
 import com.luna.echocircle.product.dto.RequestRegistProductDto;
 import com.luna.echocircle.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -24,7 +23,10 @@ public class ProductService {
         log.info("제품 등록 서비스 호출 - ");
         Product product = Product.builder()
                 .name(requestRegistProductDto.getName())
-                .barcode(requestRegistProductDto.getBarcode())
+                .category(requestRegistProductDto.getCategory())
+                .company(requestRegistProductDto.getCompany())
+                .model(requestRegistProductDto.getModel())
+                .serial(requestRegistProductDto.getSerial())
                 .build();
         try {
             String url = s3Uploader.upload(image, s3Uploader.ECHO + "/" + s3Uploader.PRODUCT);
@@ -35,11 +37,14 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product getProductByBarcode(String barcode) throws NoSuchElementException {
-        Optional<Product> opProduct = productRepository.findByBarcode(barcode);
-        if (opProduct.isEmpty())
-            throw new NoSuchElementException("존재하지 않는 barcode");
-        return opProduct.get();
+    public List<Product> getProductByCode(String code) throws NoSuchElementException {
+        List<Product> productList = productRepository.findByModel(code);
+        List<Product> tempList = productRepository.findBySerial(code);
+        if (productList.isEmpty() && tempList.isEmpty())
+            throw new NoSuchElementException("존재하지 않는 제품code");
+        for(int i=0;i<tempList.size();i++)
+            productList.add(tempList.get(i));
+        return productList;
     }
 
 

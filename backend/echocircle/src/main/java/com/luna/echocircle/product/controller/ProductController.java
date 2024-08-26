@@ -1,7 +1,7 @@
 package com.luna.echocircle.product.controller;
 
 
-import com.luna.echocircle.product.document.Product;
+import com.luna.echocircle.product.entity.Product;
 import com.luna.echocircle.product.dto.RequestRegistProductDto;
 import com.luna.echocircle.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,26 +29,35 @@ public class ProductController {
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
-    @Operation(summary = "제품 불러오기", description = "입력한 barcode의 Product 불러오기")
+    @Operation(summary = "제품 불러오기", description = "입력한 code의 Product 불러오기")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "불러오기 성공"),
             @ApiResponse(responseCode = "500", description = "불러오기 실패 - 내부 서버 오류"),
     })
-    @GetMapping("/{barcode}")
-    public ResponseEntity<?> getUserInfo(@PathVariable String barcode) throws Exception {
-        log.info("productController 호출 - 제품 가져오기: " + barcode);
+    @GetMapping("/{code}")
+    public ResponseEntity<?> loadProduct(@PathVariable String code) throws Exception {
+        log.info("productController 호출 - 제품 가져오기: " + code);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
 
         try {
-            Map<String, Object> returnData = new HashMap<>();
-            Product product = productService.getProductByBarcode(barcode);
-            log.info("제품 검색 결과: " + product);
-            returnData.put("info", product);
-            // 인증 코드 리턴
-            return new ResponseEntity<Map<String, Object>>(returnData, HttpStatus.OK);
-        } catch (Exception e) {
+            List<Product> productList = productService.getProductByCode(code);
+            log.info("제품 검색 결과: " + productList);
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("products", productList);
+            resultMap.put("httpStatus", status);
+        } catch (NullPointerException e) {
             log.info("제품 가져오기 실패 : " + e.getMessage());
-            return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }catch (Exception e) {
+            log.info("내부 서버 오류 : " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
         }
+        return new ResponseEntity<>(resultMap, status);
     }
 
     @Operation(summary = "제품등록", description = "가전제품 정보를 등록")
