@@ -39,14 +39,14 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> getProductByCode(String code) throws NoSuchElementException {
-        List<Product> productList = productRepository.findByModel(code);
-        List<Product> tempList = productRepository.findBySerial(code);
-        if (productList.isEmpty() && tempList.isEmpty())
+    public Product getProductByCode(String code) throws NoSuchElementException {
+        Product product = productRepository.findByModel(code);
+        Product temp = productRepository.findBySerial(code);
+        if (product ==null && temp ==null)
             throw new NoSuchElementException("존재하지 않는 제품code");
-        for (int i = 0; i < tempList.size(); i++)
-            productList.add(tempList.get(i));
-        return productList;
+        if(product ==null)
+            return temp;
+        return product;
     }
 
     // 기업 수거 가능여부, 추후 확장 가능
