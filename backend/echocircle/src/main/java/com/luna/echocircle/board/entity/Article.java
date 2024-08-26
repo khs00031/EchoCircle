@@ -37,7 +37,7 @@ public class Article {
     @Column(name = "registTime", nullable = false)
     private LocalDateTime registerTime;
 
-    @Column(name = "thumbnail", nullable = false)
+    @Column(name = "thumbnail")
     private String thumbnail;
 
 //    @Column(name = "imagesDir")

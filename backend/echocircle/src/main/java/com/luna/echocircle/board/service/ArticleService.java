@@ -37,12 +37,13 @@ public class ArticleService {
         return article;
     }
 
-    public Article write(RequestWriteArticleDto requestWriteArticleDto, MultipartFile thumbnail, MultipartFile[] images) {
+    public Article write(RequestWriteArticleDto requestWriteArticleDto, MultipartFile thumbnail, MultipartFile[] images) throws Exception {
         log.info("write 서비스 호출 - ");
         String thumbnailURL = "";
 
+
         Article article = Article.builder()
-                .member(memberService.getMember(requestWriteArticleDto.getMid()))
+                .member(memberService.getMember(requestWriteArticleDto.getEmail()))
                 .category(requestWriteArticleDto.getCategory())
                 .title(requestWriteArticleDto.getTitle())
                 .content(requestWriteArticleDto.getContent())
@@ -51,6 +52,8 @@ public class ArticleService {
                 .view(0)
                 .deleted(false)
                 .build();
+
+
         articleRepository.save(article);
         try {
             thumbnailURL = s3Uploader.upload(thumbnail, s3Uploader.ECHO + "/"+article.getAid());
