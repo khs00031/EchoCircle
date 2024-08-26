@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.echocircleandroid.R
 
-
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
 
@@ -24,33 +23,27 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem.MyPage
     )
 
-    NavigationBar (
+    NavigationBar(
         containerColor = colorResource(id = R.color.green),
         contentColor = Color.White
-    )
-    {
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon,contentDescription = null) },
+                icon = { Icon(item.icon, contentDescription = null) },
                 label = {
                     Text(
                         stringResource(id = item.title),
                         fontWeight = if (currentRoute == item.screen_route) FontWeight.Bold else FontWeight.Normal
                     )
-                    },
+                },
                 selected = currentRoute == item.screen_route,
                 onClick = {
+                    // 현재 스택을 초기화하고 새로운 화면으로 이동
                     navController.navigate(item.screen_route) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                inclusive = item == BottomNavItem.MyPage
-                                saveState = true
-                            }
-                        }
+                        popUpTo(0) { inclusive = true } // 스택을 초기화
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
