@@ -186,7 +186,12 @@ fun MyPageScreen(navController: NavController, myPageViewModel: MyPageViewModel)
                         if (response.httpStatus == "ACCEPTED") {
                             // 로그아웃 성공 처리
                             SharedPreferencesUtil.clearAll(context) // 모든 SharedPreferences 데이터 삭제
-                            navController.navigate("login")
+
+                            // 네비게이션 스택을 초기화하고 로그인 화면으로 이동
+                            navController.navigate("login") {
+                                popUpTo(0) { inclusive = true } // 모든 이전 화면을 제거
+                                launchSingleTop = true // 동일한 화면이 여러 번 스택에 쌓이는 것을 방지
+                            }
                         } else {
                             // 오류 메시지 처리
                         }
