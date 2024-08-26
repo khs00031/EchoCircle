@@ -25,6 +25,8 @@ public class ProductService {
                 .name(requestRegistProductDto.getName())
                 .category(requestRegistProductDto.getCategory())
                 .company(requestRegistProductDto.getCompany())
+                .size(requestRegistProductDto.getSize())
+                .year(requestRegistProductDto.getYear())
                 .model(requestRegistProductDto.getModel())
                 .serial(requestRegistProductDto.getSerial())
                 .build();
