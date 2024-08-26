@@ -44,9 +44,33 @@ public class ProductService {
         List<Product> tempList = productRepository.findBySerial(code);
         if (productList.isEmpty() && tempList.isEmpty())
             throw new NoSuchElementException("존재하지 않는 제품code");
-        for(int i=0;i<tempList.size();i++)
+        for (int i = 0; i < tempList.size(); i++)
             productList.add(tempList.get(i));
         return productList;
+    }
+
+    // 기업 수거 가능여부, 추후 확장 가능
+    public boolean canCompanyCollect(Long id) throws Exception {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty())
+            throw new NoSuchElementException("해당 가전제품 존재하지 않음");
+
+        // 2015년 이후 출시된 가전만 수거가능
+        if (product.get().getYear() >= 2015)
+            return true;
+        return false;
+    }
+
+    // 무상 방문수거 서비스 이용가능 여부
+    public boolean canVisitCollect(Long id) throws Exception {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty())
+            throw new NoSuchElementException("해당 가전제품 존재하지 않음");
+
+        // 중형가전 이상만 수거가능
+        if (product.get().getSize() >= 2)
+            return true;
+        return false;
     }
 
 

@@ -52,7 +52,35 @@ public class ProductController {
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", e.getMessage());
             resultMap.put("httpStatus", status);
-        }catch (Exception e) {
+        } catch (Exception e) {
+            log.info("내부 서버 오류 : " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @Operation(summary = "수거여부 판단", description = "입력한 id Product의 수거 가능여부 판단")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "불러오기 성공"),
+            @ApiResponse(responseCode = "500", description = "불러오기 실패 - 내부 서버 오류"),
+    })
+    @GetMapping("/collectable/{id}")
+    public ResponseEntity<?> collectable(@PathVariable Long id) throws Exception {
+        log.info("productController 호출 - 제품 가져오기: " + id);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+
+        try {
+            boolean campanyCollect = productService.canCompanyCollect(id);
+            boolean visitCollect = productService.canVisitCollect(id);
+
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("campanyCollect", campanyCollect);
+            resultMap.put("visitCollect", visitCollect);
+            resultMap.put("httpStatus", status);
+        } catch (Exception e) {
             log.info("내부 서버 오류 : " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", e.getMessage());
