@@ -7,6 +7,9 @@ import lombok.Data;
 @Builder
 public class RequestRegistProductDto {
     String name;
-    String barcode;
+    String category;
+    String company;
+    String model;
+    String serial;
     String image;
 }
