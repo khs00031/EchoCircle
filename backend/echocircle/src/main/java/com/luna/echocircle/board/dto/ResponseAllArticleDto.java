@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ResponseAllArticleDto {
     long aid;    // article id
     String nickname;    // 작성자 nickname
-    int category;    // 카테고리id
+    String category;    // 카테고리id
     String title;   // 제목
     String content;    // 내용
     LocalDateTime registTime; // 등록시간
