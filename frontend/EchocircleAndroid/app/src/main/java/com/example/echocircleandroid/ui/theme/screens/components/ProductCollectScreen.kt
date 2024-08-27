@@ -1,4 +1,4 @@
-package com.example.echocircleandroid.ui.theme.screens.components.Product;
+package com.example.echocircleandroid.ui.theme.screens.components;
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -54,7 +54,7 @@ fun ProdcutCollectScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    onClick = { navController.navigate("GetTextWithCameraScreen") },
+                    onClick = { navController.navigate("get_text_with_camera_screen") },
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = "촬영하기")
@@ -77,12 +77,15 @@ fun ProdcutCollectScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(16.dp)
                     .clickable {
-                        navController.navigate("select_model_screen")
+                        // 네비게이션 바의 "가전 수거"와 동일한 경로로 이동
+                        navController.navigate("home_collection") // 실제 경로 이름을 여기에 작성
                     }
             )
         }
     }
 }
+
+
 @Composable
 @Preview(showBackground = true)
 fun ProdcutCollectScreenPreview() {

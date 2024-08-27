@@ -80,12 +80,11 @@ fun GetTextWithCameraScreen(navController: NavController) {
         }, ContextCompat.getMainExecutor(context))
     }
 
-    /* TODO : 서버에서 해당 제품 있는지 찾아보기*/
     suspend fun sendTextToServer(text: String) {
         val found = true
 
         if(found){
-            navController.navigate(NavItem.CheckDeviceScreen.screen_route)
+            navController.navigate("insert_model_screen?capturedText=$text")
         }else{
             navController.navigate(NavItem.NotFoundDeviceScreen.screen_route)
         }
@@ -176,8 +175,6 @@ fun GetTextWithCameraScreen(navController: NavController) {
             }
 
             if (capturedText.isNotEmpty() && !isProcessing) {
-
-
                 val coroutineScope = rememberCoroutineScope()
 
                 capturedText.split("\n").forEach { text ->
@@ -212,8 +209,6 @@ fun GetTextWithCameraScreen(navController: NavController) {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -228,6 +223,7 @@ fun GetTextWithCameraScreen(navController: NavController) {
         }
     }
 }
+
 private fun ImageProxy.toBitmap(): Bitmap {
     val buffer: ByteBuffer = planes[0].buffer
     val bytes = ByteArray(buffer.remaining())

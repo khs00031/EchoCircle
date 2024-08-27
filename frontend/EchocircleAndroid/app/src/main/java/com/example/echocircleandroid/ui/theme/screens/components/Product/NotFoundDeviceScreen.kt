@@ -1,6 +1,5 @@
-package com.example.echocircleandroid.ui.theme.screens.components.HomeCollect
+package com.example.echocircleandroid.ui.theme.screens.components.Product
 
-import BottomNavItem
 import NavItem
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,7 @@ fun NotFoundDeviceScreen(navController: NavController){
     Column (
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(text = "찾으시는 모델이 없습니다. \n 지자체 연결을 도와드릴까요?")
+        Text(text = "찾으시는 모델이 없습니다. \n 선택입력 페이지로 이동할까요?")
 
         Row {
             Button(onClick = { navController.navigate(NavItem.PhoneCallCollectScreen.screen_route) }) {

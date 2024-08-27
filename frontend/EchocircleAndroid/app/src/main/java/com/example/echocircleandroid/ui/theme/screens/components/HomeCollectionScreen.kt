@@ -1,4 +1,3 @@
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,12 @@ fun HomeCollectionScreenPreview() {
     // Preview content
 }
 
+// 지은 해야할것.
+// 모델명, 시리얼넘버를 입력못할때 모델이 없을때 처리 프로세스를 아래에 만들것.
+// !!!! 시리얼넘버, 모델명등은 여기서 처리할 필요없음(ProductCollectScreen에서 처리함) !!!!!
+// size, category, company등을 입력받고 그것을 기반으로 처리방법(기업수거,순환거버넌스방문수거,스스로직접버리기방법안내) 페이지로 이동만 시켜줄것.
+// Postman에 Prodcut폴더의 "기업 및 방문수거 가능여부" API 구현되어 있음.
+// 아래 코드는 가라라서 다 지우고 새로해도 됨.
 @Composable
 fun HomeCollectionScreen(navController: NavHostController) {
     var selectedBrand by remember { mutableStateOf("") }
@@ -94,7 +99,7 @@ fun HomeCollectionScreen(navController: NavHostController) {
 
         // 다른페이지에서 email, token정보 불러오기 Test(SharedPreferencesUtil)
         email?.let {
-            Text(text = "Email: $it", modifier = Modifier.padding(top = 16.dp))
+            Text(text = "Email: $it"+"aaa", modifier = Modifier.padding(top = 16.dp))
         }
 
         authToken?.let {

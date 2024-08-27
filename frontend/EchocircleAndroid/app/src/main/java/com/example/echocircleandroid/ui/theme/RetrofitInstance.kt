@@ -9,7 +9,7 @@ object RetrofitInstance {
     private val retrofit by lazy {
         Retrofit.Builder()
 //            .baseUrl("https://10.0.2.2:8080/")      // local
-            .baseUrl("https://15.165.154.223:8080")     // ec2
+            .baseUrl("https://15.165.154.223:8081")     // ec2
             .client(createUnsafeOkHttpClient()) // 안전하지 않은 OkHttpClient 사용
             .addConverterFactory(GsonConverterFactory.create())
             .build()
