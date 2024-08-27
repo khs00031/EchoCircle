@@ -22,13 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.echocircleandroid.ui.theme.screens.data.Product
 import com.example.echocircleandroid.ui.theme.screens.data.SharedPreferencesUtil
 
 
 
 
 @Composable
-fun TotalCollectScreen(navController: NavHostController) {
+fun TotalCollectScreen(navController: NavHostController, product: Product) {
     var selectedBrand by remember { mutableStateOf("") }
     var serialNumber by remember { mutableStateOf("") }
     var expandBrand by remember { mutableStateOf(false) }
@@ -50,6 +51,16 @@ fun TotalCollectScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = "Product Information:\n" +
+                    "Brand: ${product.company}\n" +
+                    "Category: ${product.category}\n" +
+                    "Size: ${product.size}\n" +
+                    "Year: ${product.year}",
+            fontSize = 18.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
         Text(
             text = "이 페이지 넘어왔으면 product 정보는 전달 받았어야함.\n"+
             "여기서 이제 처리방법 추천해주면됨.",
