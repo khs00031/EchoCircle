@@ -87,7 +87,16 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                     }
                 }
             }
-            composable("total_collect_screen") { TotalCollectScreen(navController) }
+            composable("total_collect_screen/{selectedBrand}/{selectedCategory}/{selectedSizeValue}/{selectedYearValue}") { backStackEntry ->
+                val selectedBrand = backStackEntry.arguments?.getString("selectedBrand").toString()
+                val selectedCategory = backStackEntry.arguments?.getString("selectedCategory").toString()
+                val selectedSize = backStackEntry.arguments?.getString("selectedSizeValue")?.toInt() ?: 0
+                val selectedYear = backStackEntry.arguments?.getString("selectedYearValue")?.toInt() ?: 0
+                val product = Product(
+                    0, "", selectedCategory, selectedBrand, selectedSize, selectedYear, "", "", ""
+                )
+                TotalCollectScreen(navController, product)
+            }
             composable(BottomNavItem.HomeCollection.screen_route) { HomeCollectionScreen(navController) }
             composable(BottomNavItem.FreeSharing.screen_route) { CommunityMainScreen(navController, CommunityViewModel(application = Application(), null)) }
             composable(BottomNavItem.MyPage.screen_route) { MyPageScreen(navController, MyPageViewModel(application = Application())) }
