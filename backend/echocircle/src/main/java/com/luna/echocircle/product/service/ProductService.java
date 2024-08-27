@@ -2,6 +2,7 @@ package com.luna.echocircle.product.service;
 
 
 import com.luna.echocircle.S3Image.S3Uploader;
+import com.luna.echocircle.product.dto.RequestCollectableDto;
 import com.luna.echocircle.product.entity.Product;
 import com.luna.echocircle.product.dto.RequestRegistProductDto;
 import com.luna.echocircle.product.repository.ProductRepository;
@@ -61,6 +62,13 @@ public class ProductService {
         return false;
     }
 
+    public boolean canCompanyCollect(RequestCollectableDto requestCollectableDto) throws Exception {
+        // 2015년 이후 출시된 가전만 수거가능
+        if (requestCollectableDto.getYear() >= 2015)
+            return true;
+        return false;
+    }
+
     // 무상 방문수거 서비스 이용가능 여부
     public boolean canVisitCollect(Long id) throws Exception {
         Optional<Product> product = productRepository.findById(id);
@@ -73,5 +81,12 @@ public class ProductService {
         return false;
     }
 
+    // 무상 방문수거 서비스 이용가능 여부
+    public boolean canVisitCollect(RequestCollectableDto requestCollectableDto) throws Exception {
+        // 중형가전 이상만 수거가능
+        if (requestCollectableDto.getSize() >= 2)
+            return true;
+        return false;
+    }
 
 }
