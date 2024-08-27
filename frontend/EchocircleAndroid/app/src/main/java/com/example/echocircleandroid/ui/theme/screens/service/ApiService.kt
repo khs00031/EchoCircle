@@ -7,6 +7,8 @@ import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistResponse
 import com.example.echocircleandroid.ui.theme.screens.data.CheckDuplicateResponse
+import com.example.echocircleandroid.ui.theme.screens.data.CollectRequest
+import com.example.echocircleandroid.ui.theme.screens.data.CollectResponse
 import com.example.echocircleandroid.ui.theme.screens.data.ProductResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticleResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticlesResponse
@@ -83,4 +85,15 @@ interface ApiService {
     suspend fun getArticle(
         @Path("articleId") articleId: Int
     ): GetArticleResponse
+
+    // 기업 및 방문수거 가능 여부
+    @GET("/api/product/collectable/{productId}")
+    suspend fun getCollectable(
+        @Path("productId") id: Int
+    ): CollectResponse
+
+    // 기업 및 방문수거 가능 여부(sub)
+    @POST("/api/product/collectable")
+    suspend fun getCollectableSub(@Body request: CollectRequest): CollectResponse
+
 }

@@ -35,6 +35,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyPageVi
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyWrittenPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLoginScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Product.CollectViewModel
 import com.example.echocircleandroid.ui.theme.screens.components.Product.GetTextWithCameraScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.InsertModelScreen
 import com.example.echocircleandroid.ui.theme.screens.data.Product
@@ -110,7 +111,7 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                     id, name, selectedCategory, selectedBrand, selectedSize, selectedYear, model, serial, ""
 
                 )
-                TotalCollectScreen(navController, product)
+                TotalCollectScreen(navController, product, CollectViewModel(Application()))
             }
             composable(BottomNavItem.HomeCollection.screen_route) {
                 HomeCollectionScreen(
