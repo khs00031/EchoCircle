@@ -49,9 +49,6 @@ class CommunityViewModel(application: Application, private val articleId: Int?):
     private val _title = mutableStateOf("")
     val title: State<String> = _title
 
-    private val _categoryNumber = mutableStateOf(0)
-    val categoroyNumber: State<Int> = _categoryNumber
-
     private val _selectedCategory = mutableStateOf("")
     val selectedCategory: State<String> = _selectedCategory
 
@@ -78,16 +75,8 @@ class CommunityViewModel(application: Application, private val articleId: Int?):
         _title.value = newTitle
     }
 
-    fun setSelectedCategory(categoryNumber: Int) {
-//        _selectedCategory.value = newCategory
-//        _categoryNumber.value = categoryNumber
-        if (categoryNumber in categories.indices) {
-            _selectedCategory.value = categories[categoryNumber]
-            _categoryNumber.value = categoryNumber
-        } else {
-            _selectedCategory.value = ""
-            _categoryNumber.value = -1 // Invalid index
-        }
+    fun setSelectedCategory(newCategory: String) {
+        _selectedCategory.value = newCategory
     }
 
     fun getCategoryName(categoryNumber: Int): String {
