@@ -208,7 +208,8 @@ fun HomeCollectionScreen(navController: NavHostController) {
                 val selectedSizeValue = mapSizeToValue(selectedSize)
                 val selectedYearValue = selectedYear.toInt()
                 // Add your navigation logic here
-                navController.navigate("total_collect_screen/$selectedBrand/$selectedCategory/$selectedSizeValue/$selectedYearValue")
+//                navController.navigate("total_collect_screen/$selectedBrand/$selectedCategory/$selectedSizeValue/$selectedYearValue")
+                navController.navigate("total_collect_screen/0/none/$selectedCategory/$selectedBrand/$selectedSizeValue/$selectedYearValue/none/none/none")
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
