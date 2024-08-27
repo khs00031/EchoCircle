@@ -56,6 +56,7 @@ fun MyWrittenPostScreen(navController: NavController, myPageViewModel: MyPageVie
             // Use LazyColumn for efficient scrolling
             val communityCardDataList = articleList.map { article ->
                 CommunityCardData(
+                    aId = article.aid,
                     imageUrl = article.thumbnail ?: "",
                     title = article.title,
                     category = article.category.toString(),
@@ -66,7 +67,9 @@ fun MyWrittenPostScreen(navController: NavController, myPageViewModel: MyPageVie
 
             LazyColumn {
                 items(communityCardDataList) { cardData ->
-                    CommunityCard(data = cardData)
+                    CommunityCard(data = cardData) { aId ->
+
+                    }
                 }
             }
         } else {

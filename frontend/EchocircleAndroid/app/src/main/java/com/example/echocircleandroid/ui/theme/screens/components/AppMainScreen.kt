@@ -18,6 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.echocircleandroid.ui.theme.screens.LoginScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Community.CommunityMainScreen
+import com.example.echocircleandroid.ui.theme.screens.components.Community.CommunityViewModel
+import com.example.echocircleandroid.ui.theme.screens.components.Community.RegistPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CannotCollectDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CheckDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.FoundDeviceScreen
@@ -64,7 +66,7 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                 HomeCollectionScreen(navController)
             }
             composable(BottomNavItem.FreeSharing.screen_route) {
-                CommunityMainScreen(navController = navController)
+                CommunityMainScreen(navController = navController, communityViewModel = CommunityViewModel(application = Application(), null))
             }
             composable(BottomNavItem.MyPage.screen_route) {
                 MyPageScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))
@@ -77,6 +79,13 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
             }
             composable("start_camera") {
                 StartCameraScreen(navController)
+            }
+            composable("regist_article_screen") {
+                RegistPostScreen(navController, CommunityViewModel(application = Application(), null), true, null)
+            }
+            composable("detail_article_screen/{aId}") { backStackEntry ->
+                val articleId = backStackEntry.arguments?.getString("aId")?.toInt()
+                RegistPostScreen(navController, CommunityViewModel(Application(), articleId), false, articleId)
             }
             composable(NavItem.FoundDeviceScreen.screen_route) {
                 FoundDeviceScreen(navController)

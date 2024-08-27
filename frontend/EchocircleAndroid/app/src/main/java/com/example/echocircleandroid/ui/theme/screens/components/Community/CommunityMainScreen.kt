@@ -1,6 +1,7 @@
 package com.example.echocircleandroid.ui.theme.screens.components.Community
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -25,26 +29,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun CommunityMainScreen(navController: NavController){
+fun CommunityMainScreen(navController: NavController, communityViewModel: CommunityViewModel){
+    val articleList by communityViewModel.articleList
 
     var searchText by remember {
         mutableStateOf("")
     }
-
-    val dummy = CommunityCardData(
-        date = "2024.8.08",
-        category = "세탁기",
-        title = "삼성 세탁기 자겨가세용",
-        imageUrl = "https://picsum.photos/250/250",
-        isCompleted = true
-        )
 
     Column(
         modifier = Modifier
@@ -53,9 +49,30 @@ fun CommunityMainScreen(navController: NavController){
     ) {
         SearchBar(searchText = searchText, onValueChange = {searchText = it})
         Spacer(modifier = Modifier.height(8.dp))
-        SharingCriteriaBar()
+        SharingCriteriaBar(navController)
 
-        CommunityCard(data = dummy)
+        if (!communityViewModel.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        } else if (articleList.isNotEmpty()) {
+            val communityCardDataList = articleList.map { article ->
+                CommunityCardData(
+                    aId = article.aid,
+                    imageUrl = article.thumbnail ?: "",
+                    title = article.title,
+                    category = article.category.toString(),
+                    date = article.registTime ?: "",
+                    isCompleted = article.shared
+                )
+            }
+
+            LazyColumn {
+                items(communityCardDataList) { cardData ->
+                    CommunityCard(data = cardData, onCardClick = {aId ->
+                        // 클릭 시 getArticle 함수 호출
+                        navController.navigate("detail_article_screen/$aId")})
+                }
+            }
+        }
     }
 
 }
@@ -86,7 +103,7 @@ fun SearchBar(searchText: String, onValueChange : (String) -> Unit){
     }
 }
 @Composable
-fun SharingCriteriaBar(){
+fun SharingCriteriaBar(navController: NavController){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +119,9 @@ fun SharingCriteriaBar(){
         Spacer(modifier = Modifier.width(8.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate("regist_article_screen")
+            },
             modifier = Modifier.weight(1f)
         ) {
             Text("나눔글 등록")
@@ -110,12 +129,14 @@ fun SharingCriteriaBar(){
     }
 }
 @Composable
-fun CommunityCard(data: CommunityCardData){
+fun CommunityCard(data: CommunityCardData,
+                  onCardClick: (Int) -> Unit){
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onCardClick(data.aId) } // 클릭 이벤트 추가
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
             Image(
@@ -130,7 +151,7 @@ fun CommunityCard(data: CommunityCardData){
                 modifier = Modifier.weight(1f)
             ) {
                 Text(data.title, fontSize = 15.sp, color = Color.Black, fontWeight = FontWeight.Bold)
-                Text("카테고리: ${data.category}", fontSize = 13.sp, color = Color.Black)
+                Text("종류: ${data.category}", fontSize = 13.sp, color = Color.Black)
                 Text("등록일: ${data.date}", fontSize = 13.sp, color = Color.Black)
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -144,6 +165,7 @@ fun CommunityCard(data: CommunityCardData){
 }
 
 data class CommunityCardData(
+    val aId: Int,
     val imageUrl: String,
     val title: String,
     val category: String,
