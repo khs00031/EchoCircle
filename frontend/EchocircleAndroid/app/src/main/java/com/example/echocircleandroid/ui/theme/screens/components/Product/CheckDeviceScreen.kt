@@ -1,81 +1,156 @@
 package com.example.echocircleandroid.ui.theme.screens.components.Product
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.echocircleandroid.ui.theme.RetrofitInstance
 import com.example.echocircleandroid.ui.theme.screens.data.Product
+import com.example.echocircleandroid.ui.theme.screens.data.ProductResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 @Composable
-fun CheckDeviceScreen(navController: NavController, product: Product) {
-    var isCollectable by remember { mutableStateOf(false) }
+fun CheckDeviceScreen(
+    navController: NavController,
+    serialNumber: String // productId 대신 serialNumber 사용
+) {
+    var product by remember { mutableStateOf<Product?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    val coroutineScope = rememberCoroutineScope()
+
+    // Fetch product details on composition
+    LaunchedEffect(serialNumber) {
+        coroutineScope.launch {
+            isLoading = true
+            val fetchedProduct = fetchProductDetails(serialNumber)
+            isLoading = false
+            product = fetchedProduct
+            if (fetchedProduct == null) {
+                errorMessage = "제품 정보를 불러오는데 실패했습니다."
+            }
+        }
+    }
+
+    // Display UI
     Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        verticalArrangement = Arrangement.Center
     ) {
-        // Product 이미지
-        Image(
-            painter = rememberImagePainter(product.image),
-            contentDescription = null,
-            modifier = Modifier.size(200.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = product.name, fontSize = 20.sp)
-        Text(text = "Company: ${product.company}", fontSize = 16.sp)
-        Text(text = "Year: ${product.year}", fontSize = 16.sp)
+        if (isLoading) {
+            CircularProgressIndicator()
+        } else {
+            product?.let { prod ->
+                ProductDetailView(product = prod)
 
-        Spacer(modifier = Modifier.height(24.dp))
-        Row {
-            Button(onClick = {
-                isCollectable = true // 적절한 로직으로 대체
-
-                if (isCollectable) {
-                    navController.navigate(NavItem.FoundDeviceScreen.screen_route) {
-                        popUpTo(NavItem.CheckDeviceScreen.screen_route) { inclusive = true }
+                // 질문 및 버튼 추가
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "이 제품이 맞으신가요?",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Button(
+                        onClick = { navController.navigate(NavItem.FoundDeviceScreen.screen_route) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("예")
                     }
-                } else {
-                    navController.navigate(NavItem.CannotCollectDeviceScreen.screen_route) {
-                        popUpTo(NavItem.CheckDeviceScreen.screen_route) { inclusive = true }
+                    Button(
+                        onClick = { navController.navigate(NavItem.NotFoundDeviceScreen.screen_route) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("아니오")
                     }
                 }
-            }) {
-                Text(text = "네")
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(onClick = {
-                navController.popBackStack() // 현재 화면을 스택에서 제거
-            }) {
-                Text(text = "아니오")
+            } ?: run {
+                errorMessage?.let {
+                    Text(text = it, color = MaterialTheme.colorScheme.error, fontSize = 16.sp)
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun CheckDeviceScreenPreview() {
-    CheckDeviceScreen(
-        navController = rememberNavController(),
-        product = Product(
-            id = 1,
-            name = "LG디오스 오브제 컬렉션",
-            category = "냉장고",
-            company = "LG",
-            size = 3,
-            year = 2022,
-            model = "SQ07EJ3WES",
-            serial = "0391383",
-            image = "https://s3luna.s3.ap-northeast-2.amazonaws.com/echocircle/product/p%EB%83%89%EC%9E%A5%EA%B3%A01.jpg"
+fun ProductDetailView(product: Product) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        product.image.let { imageUrl ->
+            val painter: Painter = rememberImagePainter(imageUrl)
+            Image(
+                painter = painter,
+                contentDescription = "Product Image",
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(bottom = 16.dp)
+            )
+        }
+
+        Text(
+            text = "제품 이름: ${product.name}",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
-    )
+        Text(
+            text = "카테고리: ${product.category}",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "브랜드: ${product.company}",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "모델: ${product.model}",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "연도: ${product.year}",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+    }
+}
+
+suspend fun fetchProductDetails(serialNumber: String): Product? {
+    return try {
+        val response: ProductResponse = withContext(Dispatchers.IO) {
+            RetrofitInstance.api.getProduct(serialNumber) // serialNumber를 사용하여 API 호출
+        }
+        Log.d("fetchProductDetails", "Fetched ProductResponse: $response")
+        if (response.httpStatus == "ACCEPTED") {
+            Log.d("fetchProductDetails", "Fetched Product: ${response.product}")
+            response.product
+        } else {
+            Log.d("fetchProductDetails", "HTTP Status not accepted: ${response.httpStatus}")
+            null
+        }
+    } catch (e: Exception) {
+        Log.e("fetchProductDetails", "Error fetching product info", e)
+        null
+    }
 }
