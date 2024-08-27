@@ -7,6 +7,7 @@ import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistResponse
 import com.example.echocircleandroid.ui.theme.screens.data.CheckDuplicateResponse
+import com.example.echocircleandroid.ui.theme.screens.data.GetArticleResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticlesResponse
 import com.example.echocircleandroid.ui.theme.screens.data.RegistArticleResponse
 import okhttp3.MultipartBody
@@ -44,7 +45,37 @@ interface ApiService {
     @GET("/api/member/checkNickname/{nickname}")
     suspend fun checkNicknameDuplicate(@Path("nickname") nickname: String): CheckDuplicateResponse
 
+    // 글 등록 메서드 정의
+//    @POST("/api/board/write")
+//    suspend fun registArticle(@Body request: RegistArticleRequest): RegistArticleResponse
+
+//    @Multipart
+//    @POST("/api/board/write")
+//    suspend fun registArticle(
+//        @Part("email") email: String,
+//        @Part("category") category: Int,
+//        @Part("title") title: String,
+//        @Part("content") content: String,
+//        @Part("shared") shared: Boolean,
+//        @Part thumbnail: MultipartBody.Part?,
+//        @Part images: List<MultipartBody.Part>?
+//    ): RegistArticleResponse
+
+    @Multipart
+    @POST("/api/board/write")
+    suspend fun registArticle(
+        @Part("requestWriteArticleDto") request: RequestBody,
+        @Part thumbnail: MultipartBody.Part?,
+        @Part images: List<MultipartBody.Part>?
+    ): RegistArticleResponse
+
     // 모든 글 조회
     @GET("/api/board")
     suspend fun getArticles(): GetArticlesResponse
+
+    // 글 상세 조회
+    @GET("/api/board/{articleId}")
+    suspend fun getArticle(
+        @Path("articleId") articleId: Int
+    ): GetArticleResponse
 }

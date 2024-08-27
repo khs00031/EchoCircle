@@ -24,6 +24,7 @@ import com.example.echocircleandroid.ui.theme.screens.components.Community.Commu
 fun MyApplianceScreen(navController: NavController) {
 
     val dummy = CommunityCardData(
+        aId = 1,
         date = "2024.8.08",
         category = "세탁기",
         title = "삼성 세탁기 자겨가세용",
@@ -50,6 +51,7 @@ fun MyApplianceScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CommunityCard(data = dummy)
+        CommunityCard(data = dummy, { aId ->
+        })
     }
 }

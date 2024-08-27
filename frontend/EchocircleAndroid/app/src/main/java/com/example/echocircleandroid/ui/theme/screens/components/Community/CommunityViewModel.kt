@@ -3,51 +3,48 @@ package com.example.echocircleandroid.ui.theme.screens.components.Community
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.echocircleandroid.ui.theme.RetrofitInstance
 import com.example.echocircleandroid.ui.theme.screens.data.Article
+import com.example.echocircleandroid.ui.theme.screens.data.GetArticleResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticlesResponse
-import com.example.echocircleandroid.ui.theme.screens.data.MyPageResponse
-import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
-import com.example.echocircleandroid.ui.theme.screens.data.RegistArticleRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistArticleResponse
-import com.example.echocircleandroid.ui.theme.screens.data.RequestWriteArticleDto
-import com.example.echocircleandroid.ui.theme.screens.data.SharedPreferencesUtil
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
-import java.io.File
 import java.io.IOException
 
-class CommunityViewModel(application: Application): AndroidViewModel(application) {
+class CommunityViewModel(application: Application, private val articleId: Int?): AndroidViewModel(application) {
 
     var isLoading by mutableStateOf(false)
+    val categories = listOf("냉장고", "TV", "청소기", "에어컨", "전자레인지", "냉장고", "기타") // List of categories
+
+//    private val _aId = mutableStateOf<Int>(0)
+//    var aId: MutableState<Int> = _aId
 
     private val _articleList = mutableStateOf(listOf<Article>())
     val articleList: State<List<Article>> = _articleList
+
+    private val _article = mutableStateOf<Article?>(null)
+    val article: State<Article?> = _article
 
     private val _errorMessage = mutableStateOf<String>("")
     val errorMessage: State<String> = _errorMessage
 
     private val _getArticlesResponse = MutableStateFlow<GetArticlesResponse?>(null)
     val getArticlesResponse: StateFlow<GetArticlesResponse?> = _getArticlesResponse
+
+    private val _getArticleResponse = MutableStateFlow<GetArticleResponse?>(null)
+    val getArticleResponse: StateFlow<GetArticleResponse?> = _getArticleResponse
 
     private val _title = mutableStateOf("")
     val title: State<String> = _title
@@ -81,17 +78,38 @@ class CommunityViewModel(application: Application): AndroidViewModel(application
         _title.value = newTitle
     }
 
-    fun setSelectedCategory(newCategory: String, categoryNumber: Int) {
-        _selectedCategory.value = newCategory
-        _categoryNumber.value = categoryNumber
+    fun setSelectedCategory(categoryNumber: Int) {
+//        _selectedCategory.value = newCategory
+//        _categoryNumber.value = categoryNumber
+        if (categoryNumber in categories.indices) {
+            _selectedCategory.value = categories[categoryNumber]
+            _categoryNumber.value = categoryNumber
+        } else {
+            _selectedCategory.value = ""
+            _categoryNumber.value = -1 // Invalid index
+        }
+    }
+
+    fun getCategoryName(categoryNumber: Int): String {
+        if (categoryNumber in categories.indices) {
+            return categories[categoryNumber]
+        }
+        return ""
     }
 
     fun setContent(newContent: String) {
         _content.value = newContent
     }
 
+    fun setImageUri(newImageUri: String) {
+        _imageUri.value = Uri.parse(newImageUri)
+    }
+
     init {
         fetchArticles()
+        articleId?.let {
+            fetchArticleDetails(articleId)
+        }
     }
 
     fun fetchArticles() {
@@ -118,6 +136,43 @@ class CommunityViewModel(application: Application): AndroidViewModel(application
                     httpStatus = "INTERNAL_SERVER_ERROR",
                     message = "서버 내부 오류",
                     articles = listOf<Article>()
+                )
+            }
+        }
+    }
+
+    fun fetchArticleDetails(aId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.getArticle(articleId = aId)
+                _getArticleResponse.value = response
+
+                response.article?.let {
+                    _getArticleResponse.value = response
+                    setTitle(response.article.title)
+                    setSelectedCategory(it.category)
+                    setContent(response.article.content)
+                    // 이미지 URI를 설정, 이미지가 존재하는 경우
+                    if (response.article.images.isNotEmpty()) {
+                        setImageUri(response.article.images[0])
+                    }
+                }
+
+                isLoading = true
+            } catch (e: HttpException) {
+                // 서버에서 반환된 에러 메시지를 읽어오기
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorMessage = parseErrorMessage(errorBody)
+                _getArticleResponse.value = GetArticleResponse(
+                    httpStatus = "UNAUTHORIZED",
+                    message = errorMessage,
+                    article = null
+                )
+            } catch (e: IOException) {
+                _getArticleResponse.value = GetArticleResponse(
+                    httpStatus = "INTERNAL_SERVER_ERROR",
+                    message = "서버 내부 오류",
+                    article = null
                 )
             }
         }

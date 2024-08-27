@@ -29,6 +29,7 @@ data class Article(
     val content: String,
     val registTime: String,
     val thumbnail: String?,
+    val images: List<String>,
     val shared: Boolean,
     val view: Int,
     val deleted: Boolean
