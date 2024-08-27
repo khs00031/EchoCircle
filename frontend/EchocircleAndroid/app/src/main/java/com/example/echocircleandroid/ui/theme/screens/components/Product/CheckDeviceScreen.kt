@@ -69,13 +69,13 @@ fun CheckDeviceScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Button(
-                        onClick = { navController.navigate(NavItem.FoundDeviceScreen.screen_route) },
+                        onClick = { navController.navigate("total_collect_screen") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("예")
                     }
                     Button(
-                        onClick = { navController.navigate(NavItem.NotFoundDeviceScreen.screen_route) },
+                        onClick = { navController.popBackStack() },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("아니오")

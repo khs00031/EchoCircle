@@ -28,7 +28,6 @@ import com.example.echocircleandroid.ui.theme.screens.components.Community.Commu
 import com.example.echocircleandroid.ui.theme.screens.components.Community.RegistPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CannotCollectDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.CheckDeviceScreen
-import com.example.echocircleandroid.ui.theme.screens.components.Product.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyApplianceScreen
@@ -38,7 +37,6 @@ import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLo
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.GetTextWithCameraScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.InsertModelScreen
-//import com.example.echocircleandroid.ui.theme.screens.components.Product.SelectModelScreen
 import com.example.echocircleandroid.ui.theme.screens.data.Product
 
 @Composable
@@ -89,7 +87,7 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                     }
                 }
             }
-
+            composable("total_collect_screen") { TotalCollectScreen(navController) }
             composable(BottomNavItem.HomeCollection.screen_route) { HomeCollectionScreen(navController) }
             composable(BottomNavItem.FreeSharing.screen_route) { CommunityMainScreen(navController, CommunityViewModel(application = Application(), null)) }
             composable(BottomNavItem.MyPage.screen_route) { MyPageScreen(navController, MyPageViewModel(application = Application())) }
@@ -101,7 +99,6 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                 val articleId = backStackEntry.arguments?.getString("aId")?.toInt()
                 RegistPostScreen(navController, CommunityViewModel(Application(), articleId), false, articleId)
             }
-            composable(NavItem.FoundDeviceScreen.screen_route) { FoundDeviceScreen(navController) }
             composable(NavItem.NotFoundDeviceScreen.screen_route) { NotFoundDeviceScreen(navController) }
             composable(NavItem.CannotCollectDeviceScreen.screen_route) { CannotCollectDeviceScreen(navController) }
             composable(NavItem.PhoneCallCollectScreen.screen_route) { PhoneCallCollectScreen() }
