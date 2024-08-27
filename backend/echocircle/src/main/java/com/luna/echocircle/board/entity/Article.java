@@ -26,7 +26,7 @@ public class Article {
     private Member member;
 
     @Column(name = "category")
-    private int category;
+    private String category;
 
     @Column(name = "title", nullable = false)
     private String title;
