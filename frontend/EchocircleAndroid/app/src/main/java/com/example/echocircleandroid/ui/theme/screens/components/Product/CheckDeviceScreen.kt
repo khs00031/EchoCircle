@@ -31,6 +31,17 @@ fun CheckDeviceScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
+    // Derived states for product details
+    val id by remember { derivedStateOf { product?.id?.toString() ?: "" } }
+    val name by remember { derivedStateOf { product?.name ?: "" } }
+    val category by remember { derivedStateOf { product?.category ?: "" } }
+    val company by remember { derivedStateOf { product?.company ?: "" } }
+    val size by remember { derivedStateOf { product?.size?.toString() ?: "" } }
+    val year by remember { derivedStateOf { product?.year?.toString() ?: "" } }
+    val model by remember { derivedStateOf { product?.model ?: "" } }
+    val serial by remember { derivedStateOf { product?.serial ?: "" } }
+    val image by remember { derivedStateOf { product?.image ?: "" } }
+
     // Fetch product details on composition
     LaunchedEffect(serialNumber) {
         coroutineScope.launch {
@@ -69,7 +80,8 @@ fun CheckDeviceScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Button(
-                        onClick = { navController.navigate("total_collect_screen") },
+                        // image빼고 모든 product정보 TotalCollectScreen을 넘기기, 이미지는 URL이라 특수문자들어가서 에러난다
+                        onClick = { navController.navigate("total_collect_screen/$id/$name/$category/$company/$size/$year/$model/$serial") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("예")

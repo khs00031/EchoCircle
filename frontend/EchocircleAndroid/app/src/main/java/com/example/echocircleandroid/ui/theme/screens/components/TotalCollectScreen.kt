@@ -53,11 +53,16 @@ fun TotalCollectScreen(navController: NavHostController, product: Product) {
     ) {
         Text(
             text = "Product Information:\n" +
+                    "Id: ${product.id}\n" +
+                    "Name: ${product.name}\n" +
                     "Brand: ${product.company}\n" +
                     "Category: ${product.category}\n" +
                     "Size: ${product.size}\n" +
-                    "Year: ${product.year}",
-            fontSize = 18.sp,
+                    "Year: ${product.year}\n" +
+                    "Model: ${product.model}\n" +
+                    "Serial: ${product.serial}\n" +
+                    "Image: ${product.image}\n",
+                    fontSize = 18.sp,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 

@@ -48,7 +48,8 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
         bottomBar = {
             if (currentRoute != "login" &&
                 currentRoute != "member_login_screen" &&
-                currentRoute != "member_regist_screen") {
+                currentRoute != "member_regist_screen"
+            ) {
                 BottomNavigationBar(navController = navController)
             }
         }
@@ -87,29 +88,82 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                     }
                 }
             }
-            composable("total_collect_screen/{selectedBrand}/{selectedCategory}/{selectedSizeValue}/{selectedYearValue}") { backStackEntry ->
+//            composable("total_collect_screen/{selectedCategory}/{selectedBrand}/{selectedSizeValue}/{selectedYearValue}") { backStackEntry ->
+            composable("total_collect_screen/{id}/{name}/{selectedCategory}/{selectedBrand}/{selectedSizeValue}/{selectedYearValue}/{model}/{serial}") { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
+                val name = backStackEntry.arguments?.getString("name").toString()
+
+                val selectedCategory =
+                    backStackEntry.arguments?.getString("selectedCategory").toString()
                 val selectedBrand = backStackEntry.arguments?.getString("selectedBrand").toString()
-                val selectedCategory = backStackEntry.arguments?.getString("selectedCategory").toString()
-                val selectedSize = backStackEntry.arguments?.getString("selectedSizeValue")?.toInt() ?: 0
-                val selectedYear = backStackEntry.arguments?.getString("selectedYearValue")?.toInt() ?: 0
+                val selectedSize =
+                    backStackEntry.arguments?.getString("selectedSizeValue")?.toInt() ?: 0
+                val selectedYear =
+                    backStackEntry.arguments?.getString("selectedYearValue")?.toInt() ?: 0
+
+                val model = backStackEntry.arguments?.getString("model").toString()
+                val serial = backStackEntry.arguments?.getString("serial").toString()
+//                val image = backStackEntry.arguments?.getString("image").toString()   // 이미지는 URL이라 이거 넘겨받다가 에러날 확률 매우높음
+
                 val product = Product(
-                    0, "", selectedCategory, selectedBrand, selectedSize, selectedYear, "", "", ""
+//                    0, "", selectedCategory, selectedBrand, selectedSize, selectedYear, "", "", ""
+                    id, name, selectedCategory, selectedBrand, selectedSize, selectedYear, model, serial, ""
+
                 )
                 TotalCollectScreen(navController, product)
             }
-            composable(BottomNavItem.HomeCollection.screen_route) { HomeCollectionScreen(navController) }
-            composable(BottomNavItem.FreeSharing.screen_route) { CommunityMainScreen(navController, CommunityViewModel(application = Application(), null)) }
-            composable(BottomNavItem.MyPage.screen_route) { MyPageScreen(navController, MyPageViewModel(application = Application())) }
-            composable("my_written_posts") { MyWrittenPostScreen(navController, MyPageViewModel(application = Application())) }
+            composable(BottomNavItem.HomeCollection.screen_route) {
+                HomeCollectionScreen(
+                    navController
+                )
+            }
+            composable(BottomNavItem.FreeSharing.screen_route) {
+                CommunityMainScreen(
+                    navController,
+                    CommunityViewModel(application = Application(), null)
+                )
+            }
+            composable(BottomNavItem.MyPage.screen_route) {
+                MyPageScreen(
+                    navController,
+                    MyPageViewModel(application = Application())
+                )
+            }
+            composable("my_written_posts") {
+                MyWrittenPostScreen(
+                    navController,
+                    MyPageViewModel(application = Application())
+                )
+            }
             composable("my_appliances") { MyApplianceScreen(navController) }
             composable("start_camera") { StartCameraScreen(navController) }
-            composable("regist_article_screen") { RegistPostScreen(navController, CommunityViewModel(application = Application(), null), true, null) }
+            composable("regist_article_screen") {
+                RegistPostScreen(
+                    navController,
+                    CommunityViewModel(application = Application(), null),
+                    true,
+                    null
+                )
+            }
             composable("detail_article_screen/{aId}") { backStackEntry ->
                 val articleId = backStackEntry.arguments?.getString("aId")?.toInt()
-                RegistPostScreen(navController, CommunityViewModel(Application(), articleId), false, articleId)
+                RegistPostScreen(
+                    navController,
+                    CommunityViewModel(Application(), articleId),
+                    false,
+                    articleId
+                )
             }
-            composable(NavItem.NotFoundDeviceScreen.screen_route) { NotFoundDeviceScreen(navController) }
-            composable(NavItem.CannotCollectDeviceScreen.screen_route) { CannotCollectDeviceScreen(navController) }
+            composable(NavItem.NotFoundDeviceScreen.screen_route) {
+                NotFoundDeviceScreen(
+                    navController
+                )
+            }
+            composable(NavItem.CannotCollectDeviceScreen.screen_route) {
+                CannotCollectDeviceScreen(
+                    navController
+                )
+            }
             composable(NavItem.PhoneCallCollectScreen.screen_route) { PhoneCallCollectScreen() }
         }
     }
