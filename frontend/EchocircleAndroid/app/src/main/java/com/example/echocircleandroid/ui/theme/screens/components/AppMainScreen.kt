@@ -3,6 +3,7 @@ package com.example.echocircleandroid.ui.theme.screens.components
 import BottomNavigationBar
 import HomeCollectionScreen
 import MyPageScreen
+import StartCameraScreen
 import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -109,6 +110,9 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
             }
             composable("my_appliances") {
                 MyApplianceScreen(navController)
+            }
+            composable("start_camera") {
+                StartCameraScreen(navController)
             }
             composable(NavItem.FoundDeviceScreen.screen_route) {
                 FoundDeviceScreen(navController)
