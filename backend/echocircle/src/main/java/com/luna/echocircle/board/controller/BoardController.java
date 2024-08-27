@@ -116,7 +116,12 @@ public class BoardController {
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "글 작성 성공");
             resultMap.put("httpStatus", status);
-        } catch (Exception e) {
+        }catch (NullPointerException e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("httpStatus", status);
+            resultMap.put("message", e.getMessage());
+        }
+        catch (Exception e) {
             log.error("글 작성 실패 - " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", e.getMessage());
