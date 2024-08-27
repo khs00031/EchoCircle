@@ -41,16 +41,10 @@ class MyPageViewModel(application: Application) : AndroidViewModel(application) 
     private val _articleList = MutableStateFlow<List<Article>>(emptyList())
     val articleList: StateFlow<List<Article>> = _articleList
 
-    init {
-        fetchNickname()
-    }
-
-    private fun fetchNickname() {
+    fun fetchNickname(email:String, token:String) {
         viewModelScope.launch {
-//            _email.value = SharedPreferencesUtil.getUserEmail(context).toString()
-//            _token.value = SharedPreferencesUtil.getAuthToken(context).toString()
-            _email.value = "aaa@aaa"
-            _token.value = "ol65"
+            _email.value = email
+            _token.value = token
 
             try {
                 val mypageRequest = MypageRequest(_email.value, _token.value)
