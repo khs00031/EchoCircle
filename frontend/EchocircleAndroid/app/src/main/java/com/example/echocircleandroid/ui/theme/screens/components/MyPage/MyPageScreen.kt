@@ -184,45 +184,64 @@ fun MyPageScreen(navController: NavController, myPageViewModel: MyPageViewModel)
             }
         }
 
-        // Logout Button 시작
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    val email = SharedPreferencesUtil.getUserEmail(context) ?: return@launch
-                    val token = SharedPreferencesUtil.getAuthToken(context) ?: return@launch
+        // 로그인 및 로그아웃 버튼 선택
+        if (email == null || token == null) {
+            // 비회원 로그인 상태일 때 로그인 버튼
+            Button(
+                onClick = {
+                    navController.navigate("login") // 로그인 화면으로 이동
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = "로그인",
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            // 회원 로그인 상태일 때 로그아웃 버튼
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        val email = SharedPreferencesUtil.getUserEmail(context) ?: return@launch
+                        val token = SharedPreferencesUtil.getAuthToken(context) ?: return@launch
 
-                    try {
-                        val response = RetrofitInstance.api.logout(MypageRequest(email, token))
-                        if (response.httpStatus == "ACCEPTED") {
-                            // 로그아웃 성공 처리
-                            SharedPreferencesUtil.clearAll(context) // 모든 SharedPreferences 데이터 삭제
+                        try {
+                            val response = RetrofitInstance.api.logout(MypageRequest(email, token))
+                            if (response.httpStatus == "ACCEPTED") {
+                                // 로그아웃 성공 처리
+                                SharedPreferencesUtil.clearAll(context) // 모든 SharedPreferences 데이터 삭제
 
-                            // 네비게이션 스택을 초기화하고 로그인 화면으로 이동
-                            navController.navigate("login") {
-                                popUpTo(0) { inclusive = true } // 모든 이전 화면을 제거
-                                launchSingleTop = true // 동일한 화면이 여러 번 스택에 쌓이는 것을 방지
+                                // 네비게이션 스택을 초기화하고 로그인 화면으로 이동
+                                navController.navigate("login") {
+                                    popUpTo(0) { inclusive = true } // 모든 이전 화면을 제거
+                                    launchSingleTop = true // 동일한 화면이 여러 번 스택에 쌓이는 것을 방지
+                                }
+                            } else {
+                                // 오류 메시지 처리
                             }
-                        } else {
-                            // 오류 메시지 처리
+                        } catch (e: Exception) {
+                            // 오류 처리
                         }
-                    } catch (e: Exception) {
-                        // 오류 처리
                     }
-                }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            Text(
-                text = "로그아웃",
-                fontSize = 16.sp,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = "로그아웃",
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
-        // logout button 끝, 나중에 지울것
-
     }
 }
