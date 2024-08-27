@@ -43,7 +43,7 @@ public class ProductService {
         Product product = productRepository.findByModel(code);
         Product temp = productRepository.findBySerial(code);
         if (product ==null && temp ==null)
-            throw new NoSuchElementException("존재하지 않는 제품code");
+            throw new NoSuchElementException("존재하지 않는 제품code: "+code);
         if(product ==null)
             return temp;
         return product;
