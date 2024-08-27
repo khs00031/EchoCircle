@@ -24,7 +24,7 @@ data class Member(
 data class Article(
     val aid: Int,
     val nickname: String,
-    val category: Int,
+    val category: String,
     val title: String,
     val content: String,
     val registTime: String,

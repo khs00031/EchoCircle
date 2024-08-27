@@ -42,6 +42,16 @@ fun MyPageScreen(navController: NavController, myPageViewModel: MyPageViewModel)
     val coroutineScope = rememberCoroutineScope() // CoroutineScope 설정
     // logout test용 끝, 나중에 지울것.
 
+    // Retrieve email and token from SharedPreferences
+    val email = SharedPreferencesUtil.getUserEmail(context)
+    val token = SharedPreferencesUtil.getAuthToken(context)
+
+    email?.let { e ->
+        token?.let { t ->
+            myPageViewModel.fetchNickname(e, t)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

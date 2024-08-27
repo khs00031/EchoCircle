@@ -49,7 +49,6 @@ fun RegistPostScreen(
     val article by viewModel.article
 
     val title by viewModel.title
-    val categoryNumber by viewModel.categoroyNumber
     val selectedCategory by viewModel.selectedCategory
     val content by viewModel.content
     val imageUri by viewModel.imageUri
@@ -182,14 +181,14 @@ fun RegistPostScreen(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                categories.forEachIndexed { index, category ->
+                categories.forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category) },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = isEditMode,
                         onClick = {
                             if (isEditMode) {
-                                viewModel.setSelectedCategory(index + 1)
+                                viewModel.setSelectedCategory(category)
                             }
                             expanded = false
                         }
