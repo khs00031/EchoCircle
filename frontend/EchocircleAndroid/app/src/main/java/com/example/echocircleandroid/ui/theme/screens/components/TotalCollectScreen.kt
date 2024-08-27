@@ -1,4 +1,4 @@
-package com.example.echocircleandroid.ui.theme.screens.components.Product
+package com.example.echocircleandroid.ui.theme.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,22 +17,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.compose.ui.platform.LocalContext
 import com.example.echocircleandroid.ui.theme.screens.data.SharedPreferencesUtil
 
-@Preview(showBackground = true)
-@Composable
-fun InsertModelScreenPreview() {
-    // Preview content
-}
 
-// 모델명을 입력못할때 모델이 없을때 여기서 크기, 종류 다입력
+
+
 @Composable
-fun SelectModelScreen(navController: NavHostController) {
+fun TotalCollectScreen(navController: NavHostController) {
     var selectedBrand by remember { mutableStateOf("") }
     var serialNumber by remember { mutableStateOf("") }
     var expandBrand by remember { mutableStateOf(false) }
@@ -55,7 +51,8 @@ fun SelectModelScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "모델명을 입력못할때 모델이 없을때 여기서 크기, 종류 다입력",
+            text = "이 페이지 넘어왔으면 product 정보는 전달 받았어야함.\n"+
+            "여기서 이제 처리방법 추천해주면됨.",
             fontSize = 18.sp,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -96,7 +93,7 @@ fun SelectModelScreen(navController: NavHostController) {
 
         // 다른페이지에서 email, token정보 불러오기 Test(SharedPreferencesUtil)
         email?.let {
-            Text(text = "Email: $it", modifier = Modifier.padding(top = 16.dp))
+            Text(text = "Email: $it"+"aaa", modifier = Modifier.padding(top = 16.dp))
         }
 
         authToken?.let {

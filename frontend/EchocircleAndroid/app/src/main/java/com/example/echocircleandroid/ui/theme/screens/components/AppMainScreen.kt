@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -27,7 +28,6 @@ import com.example.echocircleandroid.ui.theme.screens.components.Community.Commu
 import com.example.echocircleandroid.ui.theme.screens.components.Community.RegistPostScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.CannotCollectDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.CheckDeviceScreen
-import com.example.echocircleandroid.ui.theme.screens.components.Product.FoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.NotFoundDeviceScreen
 import com.example.echocircleandroid.ui.theme.screens.components.HomeCollect.PhoneCallCollectScreen
 import com.example.echocircleandroid.ui.theme.screens.components.MyPage.MyApplianceScreen
@@ -37,7 +37,6 @@ import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberLo
 import com.example.echocircleandroid.ui.theme.screens.components.Member.MemberRegistScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.GetTextWithCameraScreen
 import com.example.echocircleandroid.ui.theme.screens.components.Product.InsertModelScreen
-import com.example.echocircleandroid.ui.theme.screens.components.Product.SelectModelScreen
 import com.example.echocircleandroid.ui.theme.screens.data.Product
 
 @Composable
@@ -59,21 +58,11 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("login") {
-                LoginScreen(navController)
-            }
-            composable("member_login_screen") {
-                MemberLoginScreen(navController)
-            }
-            composable("member_regist_screen") {
-                MemberRegistScreen(navController)
-            }
-            composable("product_collect_screen") {
-                ProdcutCollectScreen(navController)
-            }
-            composable("get_text_with_camera_screen") {
-                GetTextWithCameraScreen(navController)
-            }
+            composable("login") { LoginScreen(navController) }
+            composable("member_login_screen") { MemberLoginScreen(navController) }
+            composable("member_regist_screen") { MemberRegistScreen(navController) }
+            composable("product_collect_screen") { ProdcutCollectScreen(navController) }
+            composable("get_text_with_camera_screen") { GetTextWithCameraScreen(navController) }
             composable(
                 "insert_model_screen?capturedText={capturedText}",
                 arguments = listOf(navArgument("capturedText") { nullable = true })
@@ -81,10 +70,13 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                 val capturedText = backStackEntry.arguments?.getString("capturedText") ?: ""
                 InsertModelScreen(navController, serialNumber = capturedText)
             }
-            composable(NavItem.CheckDeviceScreen.screen_route) { backStackEntry ->
-                val product = navController.previousBackStackEntry?.savedStateHandle?.get<Product>("product")
-                if (product != null) {
-                    CheckDeviceScreen(navController, product)
+            composable(
+                "check_device_screen/{serialNumber}",
+                arguments = listOf(navArgument("serialNumber") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val serialNumber = backStackEntry.arguments?.getString("serialNumber")
+                if (serialNumber != null) {
+                    CheckDeviceScreen(navController, serialNumber)
                 } else {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -95,46 +87,21 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                     }
                 }
             }
-            composable("select_model_screen") {
-                SelectModelScreen(navController)
-            }
-            composable(BottomNavItem.HomeCollection.screen_route) {
-                HomeCollectionScreen(navController)
-            }
-            composable(BottomNavItem.FreeSharing.screen_route) {
-                CommunityMainScreen(navController = navController, communityViewModel = CommunityViewModel(application = Application(), null))
-            }
-            composable(BottomNavItem.MyPage.screen_route) {
-                MyPageScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))
-            }
-            composable("my_written_posts") {
-                MyWrittenPostScreen(navController, myPageViewModel = MyPageViewModel(application = Application()))
-            }
-            composable("my_appliances") {
-                MyApplianceScreen(navController)
-            }
-            composable("start_camera") {
-                StartCameraScreen(navController)
-            }
-            composable("regist_article_screen") {
-                RegistPostScreen(navController, CommunityViewModel(application = Application(), null), true, null)
-            }
+            composable("total_collect_screen") { TotalCollectScreen(navController) }
+            composable(BottomNavItem.HomeCollection.screen_route) { HomeCollectionScreen(navController) }
+            composable(BottomNavItem.FreeSharing.screen_route) { CommunityMainScreen(navController, CommunityViewModel(application = Application(), null)) }
+            composable(BottomNavItem.MyPage.screen_route) { MyPageScreen(navController, MyPageViewModel(application = Application())) }
+            composable("my_written_posts") { MyWrittenPostScreen(navController, MyPageViewModel(application = Application())) }
+            composable("my_appliances") { MyApplianceScreen(navController) }
+            composable("start_camera") { StartCameraScreen(navController) }
+            composable("regist_article_screen") { RegistPostScreen(navController, CommunityViewModel(application = Application(), null), true, null) }
             composable("detail_article_screen/{aId}") { backStackEntry ->
                 val articleId = backStackEntry.arguments?.getString("aId")?.toInt()
                 RegistPostScreen(navController, CommunityViewModel(Application(), articleId), false, articleId)
             }
-            composable(NavItem.FoundDeviceScreen.screen_route) {
-                FoundDeviceScreen(navController)
-            }
-            composable(NavItem.NotFoundDeviceScreen.screen_route) {
-                NotFoundDeviceScreen(navController)
-            }
-            composable(NavItem.CannotCollectDeviceScreen.screen_route) {
-                CannotCollectDeviceScreen(navController)
-            }
-            composable(NavItem.PhoneCallCollectScreen.screen_route) {
-                PhoneCallCollectScreen()
-            }
+            composable(NavItem.NotFoundDeviceScreen.screen_route) { NotFoundDeviceScreen(navController) }
+            composable(NavItem.CannotCollectDeviceScreen.screen_route) { CannotCollectDeviceScreen(navController) }
+            composable(NavItem.PhoneCallCollectScreen.screen_route) { PhoneCallCollectScreen() }
         }
     }
 }

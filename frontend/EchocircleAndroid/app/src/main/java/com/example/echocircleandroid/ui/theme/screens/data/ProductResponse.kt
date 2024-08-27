@@ -18,5 +18,5 @@ data class Product(
     val year: Int,
     val model: String,
     val serial: String,
-    val image: String?
+    val image: String
 ) : Parcelable
