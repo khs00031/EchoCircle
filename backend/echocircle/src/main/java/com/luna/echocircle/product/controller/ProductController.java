@@ -1,6 +1,7 @@
 package com.luna.echocircle.product.controller;
 
 
+import com.luna.echocircle.product.dto.RequestCollectableDto;
 import com.luna.echocircle.product.entity.Product;
 import com.luna.echocircle.product.dto.RequestRegistProductDto;
 import com.luna.echocircle.product.service.ProductService;
@@ -68,13 +69,41 @@ public class ProductController {
     })
     @GetMapping("/collectable/{id}")
     public ResponseEntity<?> collectable(@PathVariable Long id) throws Exception {
-        log.info("productController 호출 - 제품 가져오기: " + id);
+        log.info("productController 호출 - 가능한 수거방법: " + id);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
 
         try {
             boolean campanyCollect = productService.canCompanyCollect(id);
             boolean visitCollect = productService.canVisitCollect(id);
+
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("campanyCollect", campanyCollect);
+            resultMap.put("visitCollect", visitCollect);
+            resultMap.put("httpStatus", status);
+        } catch (Exception e) {
+            log.info("내부 서버 오류 : " + e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", e.getMessage());
+            resultMap.put("httpStatus", status);
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @Operation(summary = "수거여부 판단", description = "선택한 제품 수거 가능여부 판단")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "불러오기 성공"),
+            @ApiResponse(responseCode = "500", description = "불러오기 실패 - 내부 서버 오류"),
+    })
+    @PostMapping("/collectable")
+    public ResponseEntity<?> collectable(@RequestBody RequestCollectableDto requestCollectableDto) throws Exception {
+        log.info("productController 호출 - 가능한 수거방법: " + requestCollectableDto);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+
+        try {
+            boolean campanyCollect = productService.canCompanyCollect(requestCollectableDto);
+            boolean visitCollect = productService.canVisitCollect(requestCollectableDto);
 
             status = HttpStatus.ACCEPTED;
             resultMap.put("campanyCollect", campanyCollect);
