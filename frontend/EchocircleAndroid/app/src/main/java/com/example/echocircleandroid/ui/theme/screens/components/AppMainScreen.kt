@@ -93,13 +93,10 @@ fun AppMainScreen(navController: NavHostController, startDestination: String) {
                 val id = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
                 val name = backStackEntry.arguments?.getString("name").toString()
 
-                val selectedCategory =
-                    backStackEntry.arguments?.getString("selectedCategory").toString()
+                val selectedCategory = backStackEntry.arguments?.getString("selectedCategory").toString()
                 val selectedBrand = backStackEntry.arguments?.getString("selectedBrand").toString()
-                val selectedSize =
-                    backStackEntry.arguments?.getString("selectedSizeValue")?.toInt() ?: 0
-                val selectedYear =
-                    backStackEntry.arguments?.getString("selectedYearValue")?.toInt() ?: 0
+                val selectedSize = backStackEntry.arguments?.getString("selectedSizeValue")?.toInt() ?: 0
+                val selectedYear = backStackEntry.arguments?.getString("selectedYearValue")?.toInt() ?: 0
 
                 val model = backStackEntry.arguments?.getString("model").toString()
                 val serial = backStackEntry.arguments?.getString("serial").toString()
