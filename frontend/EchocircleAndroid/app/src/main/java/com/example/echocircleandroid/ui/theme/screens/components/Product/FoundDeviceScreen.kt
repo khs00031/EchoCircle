@@ -1,6 +1,5 @@
-package com.example.echocircleandroid.ui.theme.screens.components.HomeCollect
+package com.example.echocircleandroid.ui.theme.screens.components.Product
 
-import BottomNavItem
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button

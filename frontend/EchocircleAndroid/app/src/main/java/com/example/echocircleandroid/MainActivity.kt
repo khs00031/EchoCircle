@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             EchocircleAndroidTheme {
                 val startDestination = if (SharedPreferencesUtil.getAuthToken(this) != null) {
-                    "direct_processing" // 로그인 상태인 경우 홈 화면으로 시작
+                    "product_collect_screen" // 로그인 상태인 경우 홈 화면으로 시작
                 } else {
                     "login" // 로그인되지 않은 경우 로그인 화면으로 시작
                 }

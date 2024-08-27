@@ -110,7 +110,7 @@ fun MemberLoginScreen(navController: NavHostController) {
                 if (it.httpStatus == "ACCEPTED") {
                     Text(text = it.message, color = Color.White)
                     // 로그인 성공 후 화면 이동
-                    navController.navigate(BottomNavItem.DirectProcessing.screen_route)
+                    navController.navigate(BottomNavItem.ProductCollect.screen_route)
                 } else {
                     // 로그인 실패, 에러 메시지 출력
                     Text(text = it.message, color = Color.Red)

@@ -5,6 +5,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="direct_processing">직접 처리</string>
+    <string name="product_collect">제품 처리</string>
     <string name="app_collection">가전 수거</string>
     <string name="free_sharing">무료 나눔</string>
     <string name="my_page">마이 페이지</string>

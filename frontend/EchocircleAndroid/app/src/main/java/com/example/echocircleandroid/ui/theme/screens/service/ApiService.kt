@@ -7,6 +7,7 @@ import com.example.echocircleandroid.ui.theme.screens.data.MypageRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistRequest
 import com.example.echocircleandroid.ui.theme.screens.data.RegistResponse
 import com.example.echocircleandroid.ui.theme.screens.data.CheckDuplicateResponse
+import com.example.echocircleandroid.ui.theme.screens.data.ProductResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticleResponse
 import com.example.echocircleandroid.ui.theme.screens.data.GetArticlesResponse
 import com.example.echocircleandroid.ui.theme.screens.data.RegistArticleResponse
@@ -44,6 +45,10 @@ interface ApiService {
     // 닉네임 중복 확인을 위한 GET 메서드 정의
     @GET("/api/member/checkNickname/{nickname}")
     suspend fun checkNicknameDuplicate(@Path("nickname") nickname: String): CheckDuplicateResponse
+
+    @GET("/api/product/{serialNumber}")
+    suspend fun getProduct(@Path("serialNumber") serialNumber: String): ProductResponse
+
 
     // 글 등록 메서드 정의
 //    @POST("/api/board/write")

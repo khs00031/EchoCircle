@@ -11,7 +11,8 @@ sealed class BottomNavItem(
     val icon: ImageVector,
     val screen_route: String
 ) {
-    data object DirectProcessing : BottomNavItem( R.string.direct_processing, Icons.Default.Search, "direct_processing")
+//    data object DirectProcessing : BottomNavItem( R.string.direct_processing, Icons.Default.Search, "direct_processing")
+    data object ProductCollect : BottomNavItem( R.string.product_collect, Icons.Default.Search, "product_collect_screen")
     data object HomeCollection : BottomNavItem(R.string.app_collection, Icons.Default.Home, "home_collection")
     data object FreeSharing : BottomNavItem(R.string.free_sharing, Icons.Default.Favorite, R.string.community_main_screen.toString())
     data object MyPage : BottomNavItem( R.string.my_page, Icons.Default.Person, "my_page")
