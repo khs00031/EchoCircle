@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.ui.platform.LocalContext
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeCollectionScreen(navController: NavHostController) {
@@ -203,20 +202,26 @@ fun HomeCollectionScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // 모든 드롭다운 메뉴가 선택되었는지 확인하는 논리 추가
+        val allFieldsSelected = selectedBrand.isNotEmpty() &&
+                selectedCategory.isNotEmpty() &&
+                selectedSize.isNotEmpty() &&
+                selectedYear.isNotEmpty()
+
         Button(
             onClick = {
                 val selectedSizeValue = mapSizeToValue(selectedSize)
                 val selectedYearValue = selectedYear.toInt()
-                // Add your navigation logic here
-//                navController.navigate("total_collect_screen/$selectedBrand/$selectedCategory/$selectedSizeValue/$selectedYearValue")
                 navController.navigate("total_collect_screen/0/none/$selectedCategory/$selectedBrand/$selectedSizeValue/$selectedYearValue/none/none")
             },
+            enabled = allFieldsSelected, // 버튼 활성화 조건
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text("조회")
         }
     }
 }
+
 
 /* ToDo : 서버에 디바이스 정보가 있는지 없는지 여부 요청 */
 private fun checkDeviceInfo(): Boolean {
