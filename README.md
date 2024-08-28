@@ -1,6 +1,6 @@
 # 프로젝트 소개
-![ERD](./img/echocircle2.png)
-https://www.youtube.com/watch?v=lArIBvs_a3c
+![ERD](./img/echocircle2.png)  
+https://www.youtube.com/watch?v=lArIBvs_a3c  
 EchoCirecle을 이용하여 폐가전제품을 간편히 처리하세요!  
 현대 사회에서 가전제품의 사용 수명이 짧아지면서 폐가전의 처리가 중요한 문제로 대두되고 있습니다.  
 그러나 기존 폐가전을 처리하기 위한 절차는 복잡하고 번거로워 많은 사람들이 올바르게 폐기하지 못하고 있습니다.  
