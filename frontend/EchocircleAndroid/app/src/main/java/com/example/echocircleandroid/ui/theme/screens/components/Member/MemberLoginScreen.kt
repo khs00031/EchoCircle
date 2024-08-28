@@ -93,7 +93,7 @@ fun MemberLoginScreen(navController: NavHostController) {
                     .fillMaxWidth()
                     .height(50.dp)
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.yellow))
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green))
             ) {
                 Text(text = "로그인", color = Color.Black)
             }

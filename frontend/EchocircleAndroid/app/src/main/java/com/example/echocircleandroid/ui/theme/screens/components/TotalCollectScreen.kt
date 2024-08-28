@@ -1,8 +1,10 @@
 package com.example.echocircleandroid.ui.theme.screens.components
 
-import androidx.compose.foundation.Image
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -27,13 +31,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
 import com.example.echocircleandroid.ui.theme.screens.components.Product.CollectViewModel
 import com.example.echocircleandroid.ui.theme.screens.data.Product
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
 
 @Composable
@@ -82,24 +91,26 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .width(70.dp),
+            .width(30.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        // Image selection section
-        Box(
-            modifier = Modifier
-                .size(100.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            product.image?.let {
-                Image(
-                    painter = rememberImagePainter(it),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Box(
+//            modifier = Modifier
+//                .size(100.dp)
+//                .background(color = Color.Gray),
+//            contentAlignment = Alignment.Center
+//        ) {
+////            product.image.let { imageUrl ->
+//                Image(
+//                    painter = rememberAsyncImagePainter(product.image),
+//                    contentDescription = "Selected Image",
+//                    modifier = Modifier.size(100.dp)
+//                )
+////            }
+//        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -191,7 +202,7 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
 
             OutlinedTextField(
-                value = product.size.toString(),
+                value = mapValueToSize(product.size),
                 onValueChange = {},
                 readOnly = true,
                 modifier = Modifier
@@ -257,7 +268,7 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "시리얼 번호: ",
+                text = "시리얼\n번호: ",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .width(70.dp)
@@ -346,7 +357,8 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
         onDismissRequest = { showCompanyDialog = false },
         onConfirm = { input ->
             showCompanyDialog = false
-        }
+        },
+        product = product
     )
 
     // Display the dialog if showDialog is true
@@ -441,7 +453,7 @@ fun DisplayProductSubInfo(product: Product, collectViewModel: CollectViewModel) 
             Spacer(modifier = Modifier.width(8.dp))
 
             OutlinedTextField(
-                value = product.size.toString(),
+                value = mapValueToSize(product.size),
                 onValueChange = {},
                 readOnly = true,
                 modifier = Modifier
@@ -545,7 +557,8 @@ fun DisplayProductSubInfo(product: Product, collectViewModel: CollectViewModel) 
         onDismissRequest = { showCompanyDialog = false },
         onConfirm = { input ->
             showCompanyDialog = false
-        }
+        },
+        product = product
     )
 
     // Display the dialog if showDialog is true
@@ -558,6 +571,7 @@ fun DisplayProductSubInfo(product: Product, collectViewModel: CollectViewModel) 
     )
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProcessingVisitDialog(
     showDialog: Boolean,
@@ -572,12 +586,18 @@ fun ProcessingVisitDialog(
             title = { Text(text = "방문 수거 안내") },
             text = {
                 Column {
-                    OutlinedTextField(
-                        value = dialogInput,
-                        onValueChange = { dialogInput = it },
-                        label = { Text("처리 방법") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    // Information pager
+                    val pagerState = rememberPagerState()
+
+                    HorizontalPager(
+                        count = 1,
+                        state = pagerState,
+                        modifier = Modifier.height(300.dp)
+                    ) { page ->
+                        when (page) {
+                            0 -> ProcessingPage1()
+                        }
+                    }
                 }
             },
             confirmButton = {
@@ -591,26 +611,101 @@ fun ProcessingVisitDialog(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProcessingCompanyDialog(
     showDialog: Boolean,
     onDismissRequest: () -> Unit,
-    onConfirm: (String) -> Unit
+    onConfirm: (String) -> Unit,
+    product: Product
 ) {
     var dialogInput by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
+//    if (showDialog) {
+//        AlertDialog(
+//            onDismissRequest = { onDismissRequest() },
+//            title = { Text(text = "회사 수거 안내") },
+//            text = {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(horizontal = 16.dp)
+//                        .height(300.dp),
+//                ) {
+//                    Text(
+//                        text = when (product.company) {
+//                            "LG" -> {
+//                                buildAnnotatedString {
+//                                    withStyle(style = SpanStyle(color = Color.Blue)) {
+//                                        append("LG전자 서비스센터: 1588-7777")
+//                                    }
+//                                }
+//                            }
+//                            "삼성" -> {
+//                                buildAnnotatedString {
+//                                    withStyle(style = SpanStyle(color = Color.Blue)) {
+//                                        append("삼성전자 서비스센터: 1588-3366")
+//                                    }
+//                                }
+//                            }
+//                            else -> {
+//                                buildAnnotatedString {
+//                                    withStyle(style = SpanStyle(color = Color.Blue)) {
+//                                        append("해당 브랜드의 서비스 센터에 연락하여 수거 예약을 진행해 주세요.")
+//                                    }
+//                                }
+//                            }
+//                        },
+//                        fontSize = 14.sp,
+//                        fontWeight = FontWeight.SemiBold,
+//                        modifier = Modifier.clickable {
+//                            when (product.company) {
+//                                "LG" -> {
+//                                    val phoneNumber = "1588-7777"
+//                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+//                                    context.startActivity(intent)
+//                                }
+//                                "삼성" -> {
+//                                    val phoneNumber = "1588-3366"
+//                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+//                                    context.startActivity(intent)
+//                                }
+//                                else -> {
+//                                    // For other brands, you may want to handle it differently
+//                                }
+//                            }
+//                        }
+//                    )
+//                }
+//            },
+//            confirmButton = {
+//                Button(onClick = {
+//                    onConfirm(dialogInput)
+//                }) {
+//                    Text("확인")
+//                }
+//            }
+//        )
+//    }
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { onDismissRequest() },
-            title = { Text(text = "회사 수거 안내") },
+            title = { Text(text = "방문 수거 안내") },
             text = {
                 Column {
-                    OutlinedTextField(
-                        value = dialogInput,
-                        onValueChange = { dialogInput = it },
-                        label = { Text("처리 방법") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    // Information pager
+                    val pagerState = rememberPagerState()
+
+                    HorizontalPager(
+                        count = 1,
+                        state = pagerState,
+                        modifier = Modifier.height(300.dp)
+                    ) { page ->
+                        when (page) {
+                            0 -> ProcessingPage5(product)
+                        }
+                    }
                 }
             },
             confirmButton = {
@@ -624,6 +719,7 @@ fun ProcessingCompanyDialog(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ProcessingDirectDialog(
     showDialog: Boolean,
@@ -635,15 +731,36 @@ fun ProcessingDirectDialog(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { onDismissRequest() },
-            title = { Text(text = "처리 방법 작성") },
+            title = { Text(text = "처리 방법 안내") },
             text = {
                 Column {
-                    OutlinedTextField(
-                        value = dialogInput,
-                        onValueChange = { dialogInput = it },
-                        label = { Text("처리 방법") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    // Information pager
+                    val pagerState = rememberPagerState()
+
+                    HorizontalPager(
+                        count = 3,
+                        state = pagerState,
+                        modifier = Modifier.height(300.dp)
+                    ) { page ->
+                        when (page) {
+                            0 -> ProcessingPage2()
+                            1 -> ProcessingPage3()
+                            2 -> ProcessingPage4()
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Page Indicator and Navigation
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${pagerState.currentPage + 1} / ${pagerState.pageCount}",
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             },
             confirmButton = {
@@ -654,5 +771,219 @@ fun ProcessingDirectDialog(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun ProcessingPage1() {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .height(100.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "폐가전 무상 수거 서비스",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 15.dp),
+        )
+
+        Text(
+            text = "대형 폐가전은 1개 이상, 소형 폐가전은 5개 이상 배출 시 무상으로 수거해 줍니다. 전화나 온라인으로 예약 가능합니다. \n\n",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+        ) {
+            Text(
+                text = "전화: ",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+
+            // Handle clickable phone number
+            ClickableText(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = Color.Blue)) {
+                        append("1599-0903")
+                    }
+                },
+                onClick = { offset ->
+                    // Launch the dialer with the phone number
+                    val phoneNumber = "1599-0903"
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                    context.startActivity(intent)
+                }
+            )
+        }
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+        ) {
+            Text(
+                text = "온라인: ",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+
+            ClickableText(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = Color.Blue)) {
+                        append("폐가전제품 무상 방문수거 홈페이지 바로가기")
+                    }
+                },
+                onClick = { offset ->
+                    val link = "https://15990903.or.kr/portal/main/main.do"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ProcessingPage2() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "1. 동주민센터 방문 처리",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "동주민센터에 방문하여 소형 폐가전을 배출할 수 있습니다. 배출 후, 지정된 날짜에 수거해 갑니다. \n\n 배출 방법: 폐가전을 동주민센터에 직접 가져다 주시면 됩니다. 또는, 해당 구청의 환경과에 문의하면 자세한 배출 방법을 안내받을 수 있습니다.",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+fun ProcessingPage3() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "2. 재활용센터, 주민센터 수거함 이용",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "일부 재활용센터나 주민센터에 소형 폐가전 전용 수거함이 설치되어 있습니다. 이를 이용하여 소형 폐가전을 배출할 수 있습니다. \n\n" +
+                    "예시: 배터리, 형광등, 작은 전자제품(휴대폰, 충전기 등)을 전용 수거함에 배출할 수 있습니다.",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+fun ProcessingPage4() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "3. 대형마트 및 전자제품 판매점 반납 서비스",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = "새 전자제품 구매 시, 기존 소형 폐가전을 무료로 반납할 수 있습니다. 대형마트나 전자제품 판매점에서 가능하며, 반납 조건을 확인하세요. \n",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+fun ProcessingPage5(product: Product) {
+
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .height(300.dp),
+    ) {
+        Text(
+            text = when (product.company) {
+                "LG" -> {
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Blue)) {
+                            append("LG전자 서비스센터: 1588-7777")
+                        }
+                    }
+                }
+                "삼성" -> {
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Blue)) {
+                            append("삼성전자 서비스센터: 1588-3366")
+                        }
+                    }
+                }
+                else -> {
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Blue)) {
+                            append("해당 브랜드의 서비스 센터에 연락하여 수거 예약을 진행해 주세요.")
+                        }
+                    }
+                }
+            },
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.clickable {
+                when (product.company) {
+                    "LG" -> {
+                        val phoneNumber = "1588-7777"
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        context.startActivity(intent)
+                    }
+                    "삼성" -> {
+                        val phoneNumber = "1588-3366"
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        context.startActivity(intent)
+                    }
+                    else -> {
+                        // For other brands, you may want to handle it differently
+                    }
+                }
+            }
+        )
+    }
+}
+
+private fun mapValueToSize(size: Int): String {
+    return when (size) {
+        1 -> "소형"
+        2 -> "중형"
+        3 -> "대형"
+        else -> ""
     }
 }
