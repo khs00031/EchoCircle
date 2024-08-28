@@ -92,6 +92,15 @@ public class MemberService {
         return responseMypageDto;
     }
 
+    public List<Article> loadMyArticles(RequestMyPageDto requestMyPageDto) throws Exception{
+        Member member = memberRepository.findMemberByEmail(requestMyPageDto.getEmail());
+        if(!member.getToken().equals(requestMyPageDto.getToken()))
+            throw new InvalidCredentialsException("토큰만료");
+
+        List<Article> articleList = articleRepository.findByMember_Id(member.getId());
+        return articleList;
+    }
+
     public boolean logout(RequestMyPageDto requestMyPageDto){
         Member member = memberRepository.findMemberByEmail(requestMyPageDto.getEmail());
         member.setToken("");
