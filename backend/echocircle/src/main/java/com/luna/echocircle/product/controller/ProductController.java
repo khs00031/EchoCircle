@@ -74,11 +74,11 @@ public class ProductController {
         HttpStatus status;
 
         try {
-            boolean campanyCollect = productService.canCompanyCollect(id);
+            boolean companyCollect = productService.canCompanyCollect(id);
             boolean visitCollect = productService.canVisitCollect(id);
 
             status = HttpStatus.ACCEPTED;
-            resultMap.put("campanyCollect", campanyCollect);
+            resultMap.put("companyCollect", companyCollect);
             resultMap.put("visitCollect", visitCollect);
             resultMap.put("httpStatus", status);
         } catch (Exception e) {
@@ -102,11 +102,11 @@ public class ProductController {
         HttpStatus status;
 
         try {
-            boolean campanyCollect = productService.canCompanyCollect(requestCollectableDto);
+            boolean companyCollect = productService.canCompanyCollect(requestCollectableDto);
             boolean visitCollect = productService.canVisitCollect(requestCollectableDto);
 
             status = HttpStatus.ACCEPTED;
-            resultMap.put("campanyCollect", campanyCollect);
+            resultMap.put("companyCollect", companyCollect);
             resultMap.put("visitCollect", visitCollect);
             resultMap.put("httpStatus", status);
         } catch (Exception e) {
