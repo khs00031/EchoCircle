@@ -1,8 +1,6 @@
 package com.example.echocircleandroid.ui.theme.screens.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -82,24 +81,38 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .width(70.dp),
+            .width(30.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        // Image selection section
-        Box(
-            modifier = Modifier
-                .size(100.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            product.image?.let {
-                Image(
-                    painter = rememberImagePainter(it),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
+//        // Image selection section
+//        product.image.let { imageUrl ->
+//            val painter: Painter = rememberImagePainter(imageUrl)
+//            Image(
+//                painter = painter,
+//                contentDescription = "Product Image",
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .padding(bottom = 16.dp)
+//            )
+//        }
+
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Box(
+//            modifier = Modifier
+//                .size(100.dp)
+//                .background(color = Color.Gray),
+//            contentAlignment = Alignment.Center
+//        ) {
+////            product.image.let { imageUrl ->
+//                Image(
+//                    painter = rememberAsyncImagePainter(product.image),
+//                    contentDescription = "Selected Image",
+//                    modifier = Modifier.size(100.dp)
+//                )
+////            }
+//        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -191,7 +204,7 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
 
             OutlinedTextField(
-                value = product.size.toString(),
+                value = mapValueToSize(product.size),
                 onValueChange = {},
                 readOnly = true,
                 modifier = Modifier
@@ -257,7 +270,7 @@ fun DisplayProductInfo(product: Product, collectViewModel: CollectViewModel) {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "시리얼 번호: ",
+                text = "시리얼\n번호: ",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .width(70.dp)
@@ -441,7 +454,7 @@ fun DisplayProductSubInfo(product: Product, collectViewModel: CollectViewModel) 
             Spacer(modifier = Modifier.width(8.dp))
 
             OutlinedTextField(
-                value = product.size.toString(),
+                value = mapValueToSize(product.size),
                 onValueChange = {},
                 readOnly = true,
                 modifier = Modifier
@@ -654,5 +667,14 @@ fun ProcessingDirectDialog(
                 }
             }
         )
+    }
+}
+
+private fun mapValueToSize(size: Int): String {
+    return when (size) {
+        1 -> "소형"
+        2 -> "중형"
+        3 -> "대형"
+        else -> ""
     }
 }

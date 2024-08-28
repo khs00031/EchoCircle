@@ -26,7 +26,7 @@ import java.io.IOException
 class CommunityViewModel(application: Application, private val articleId: Int?): AndroidViewModel(application) {
 
     var isLoading by mutableStateOf(false)
-    val categories = listOf("냉장고", "TV", "청소기", "에어컨", "전자레인지", "냉장고", "기타") // List of categories
+    val categories = listOf("냉장고", "세탁기|건조기", "에어컨", "선풍기", "청소기", "오븐", "공기청정기|제습기", "에어드레서", "인덕션|전자레인지", "식기세척기", "기타")
 
 //    private val _aId = mutableStateOf<Int>(0)
 //    var aId: MutableState<Int> = _aId

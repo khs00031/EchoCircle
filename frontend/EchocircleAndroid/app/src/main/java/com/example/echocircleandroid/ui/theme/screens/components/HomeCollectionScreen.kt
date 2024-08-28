@@ -40,8 +40,8 @@ fun HomeCollectionScreen(navController: NavHostController) {
     // Get the context
     val context = LocalContext.current
 
-    val brands = listOf("삼성", "LG", "다이슨")
-    val categories = listOf("냉장고", "에어컨", "세탁기")
+    val brands = listOf("삼성전자", "LG전자", "위니아", "캐리어", "기타")
+    val categories = listOf("냉장고", "세탁기|건조기", "에어컨", "선풍기", "청소기", "오븐", "공기청정기|제습기", "에어드레서", "인덕션|전자레인지", "식기세척기", "기타")
     val sizes = listOf("소형", "중형", "대형")
     val years = (2024 downTo 2000).map { it.toString() }
 

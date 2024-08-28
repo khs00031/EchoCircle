@@ -35,7 +35,7 @@ fun InsertModelScreen(navController: NavController, serialNumber: String = "") {
         Text(
             text = "수거하실 폐가전의 정보를 입력해주세요.",
             fontSize = 18.sp,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 5.dp)
         )
 
         // 여백 추가하여 에러 메시지 공간 확보
@@ -49,31 +49,17 @@ fun InsertModelScreen(navController: NavController, serialNumber: String = "") {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         } else {
-            Spacer(modifier = Modifier.height(22.dp)) // 에러 메시지가 없을 때의 여백 확보
+            Spacer(modifier = Modifier.height(15.dp)) // 에러 메시지가 없을 때의 여백 확보
         }
 
-        Box {
-            Button(onClick = { expandBrand = !expandBrand }) {
-                Text(text = if (selectedBrand.isEmpty()) "브랜드 선택" else selectedBrand)
-            }
-            DropdownMenu(expanded = expandBrand, onDismissRequest = { expandBrand = false }) {
-                val brands = listOf("삼성", "LG", "다이슨")
-                brands.forEach { brand ->
-                    DropdownMenuItem(
-                        text = { Text(brand) },
-                        onClick = {
-                            selectedBrand = brand
-                            expandBrand = false
-                        }
-                    )
-                }
-            }
-
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             TextField(
                 value = currentSerialNumber,
                 onValueChange = { currentSerialNumber = it },
                 label = { Text("시리얼 넘버") },
-                modifier = Modifier.padding(top = 50.dp)
+//                modifier = Modifier.padding(top = 5.dp)
             )
 
             Button(
@@ -94,7 +80,8 @@ fun InsertModelScreen(navController: NavController, serialNumber: String = "") {
                         }
                     }
                 },
-                modifier = Modifier.padding(top = 110.dp)
+                modifier = Modifier.padding(top = 15.dp),
+
             ) {
                 Text("확인")
             }
