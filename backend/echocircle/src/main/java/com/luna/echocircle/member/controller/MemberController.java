@@ -146,10 +146,10 @@ public class MemberController {
 
     }
 
-    @Operation(summary = "마이페이지", description = "마이페이지 불러오는 API")
+    @Operation(summary = "작성글 불러오기", description = "작성글 불러오는 API")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "마이페이지 로드 성공"),
-            @ApiResponse(responseCode = "500", description = "마이페이지 로드 실패 - 내부 서버 오류"),
+            @ApiResponse(responseCode = "200", description = "작성글 로드 성공"),
+            @ApiResponse(responseCode = "500", description = "작성글 로드 실패 - 내부 서버 오류"),
     })
     @PostMapping("/mypage/article")
     public ResponseEntity<?> mypageArticles(@RequestBody RequestMyPageDto requestMyPageDto) {
