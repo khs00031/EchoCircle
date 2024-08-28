@@ -47,7 +47,7 @@ public class ArticleService {
                 .category(requestWriteArticleDto.getCategory())
                 .title(requestWriteArticleDto.getTitle())
                 .content(requestWriteArticleDto.getContent())
-                .registerTime(LocalDateTime.now())
+                .registTime(LocalDateTime.now())
                 .shared(requestWriteArticleDto.isShared())
                 .view(0)
                 .deleted(false)

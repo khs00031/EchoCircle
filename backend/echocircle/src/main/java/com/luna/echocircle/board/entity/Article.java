@@ -35,7 +35,7 @@ public class Article {
     private String content;
 
     @Column(name = "registTime", nullable = false)
-    private LocalDateTime registerTime;
+    private LocalDateTime registTime;
 
     @Column(name = "thumbnail")
     private String thumbnail;
